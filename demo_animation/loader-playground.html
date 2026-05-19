@@ -18,10 +18,31 @@
     background: #f5f5f7;
     min-height: 100vh;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
+    align-items: flex-start;
+    justify-content: center;
     padding: 40px 20px 60px;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 320px 320px;
+    gap: 20px;
+    align-items: start;
+  }
+
+  .col {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .col-header {
+    font-size: 11px;
+    font-weight: 700;
+    color: #c0c0c5;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    padding: 0 4px;
   }
 
   /* ── LOADER PREVIEW ── */
@@ -226,158 +247,150 @@
 </head>
 <body>
 
-<!-- Loader preview -->
-<div class="loader-wrap" id="loaderWrap">
-  <div class="loader anim-chase" id="loader">
-    <div class="dot-slot"><div class="dot"></div></div>
-    <div class="dot-slot"><div class="dot"></div></div>
-    <div class="dot-slot"><div class="dot"></div></div>
-    <div class="dot-slot"><div class="dot"></div></div>
-  </div>
-</div>
+<div class="layout">
 
-<!-- Controls -->
-<div class="panel">
-  <div class="panel-title">Параметры</div>
+  <!-- ── LEFT: Dots ── -->
+  <div class="col">
+    <div class="col-header">Dots</div>
 
-  <div class="ctrl">
-    <div class="ctrl-label">Тип анимации</div>
-    <div class="tabs">
-      <button class="tab active" data-anim="chase">Chase</button>
-      <button class="tab" data-anim="bounce">Bounce</button>
-      <button class="tab" data-anim="pulse">Pulse</button>
-      <button class="tab" data-anim="wave">Wave</button>
-      <button class="tab" data-anim="fade">Fade</button>
+    <div class="loader-wrap" id="loaderWrap">
+      <div class="loader anim-chase" id="loader">
+        <div class="dot-slot"><div class="dot"></div></div>
+        <div class="dot-slot"><div class="dot"></div></div>
+        <div class="dot-slot"><div class="dot"></div></div>
+        <div class="dot-slot"><div class="dot"></div></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Параметры</div>
+      <div class="ctrl">
+        <div class="ctrl-label">Тип анимации</div>
+        <div class="tabs">
+          <button class="tab active" data-anim="chase">Chase</button>
+          <button class="tab" data-anim="bounce">Bounce</button>
+          <button class="tab" data-anim="pulse">Pulse</button>
+          <button class="tab" data-anim="wave">Wave</button>
+          <button class="tab" data-anim="fade">Fade</button>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="ctrl">
+        <div class="ctrl-label">Скорость <span id="speedVal">1.2s</span></div>
+        <input type="range" id="speed" min="0.3" max="3" step="0.05" value="1.2">
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-label">Размер точки (малая) <span id="smallVal">4px</span></div>
+        <input type="range" id="smallSize" min="2" max="16" step="1" value="4">
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-label">Активная точка (большая) <span id="largeVal">8px</span></div>
+        <input type="range" id="largeSize" min="4" max="28" step="1" value="8">
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-label">Расстояние <span id="gapVal">6px</span></div>
+        <input type="range" id="gap" min="2" max="28" step="1" value="6">
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-label">Количество точек <span id="countVal">4</span></div>
+        <input type="range" id="dotCount" min="2" max="8" step="1" value="4">
+      </div>
+      <div class="divider"></div>
+      <div class="ctrl">
+        <div class="ctrl-label">Цвет</div>
+        <div class="swatches" id="swatches">
+          <div class="swatch active" data-color="#2D3137" style="background:#2D3137"></div>
+          <div class="swatch" data-color="#007AFF" style="background:#007AFF"></div>
+          <div class="swatch" data-color="#34C759" style="background:#34C759"></div>
+          <div class="swatch" data-color="#FF3B30" style="background:#FF3B30"></div>
+          <div class="swatch" data-color="#FF9500" style="background:#FF9500"></div>
+          <div class="swatch" data-color="#AF52DE" style="background:#AF52DE"></div>
+          <div class="swatch" data-color="#ffffff" style="background:#fff;border:2px solid #e5e5ea"></div>
+          <div class="swatch-custom"><input type="color" id="customColor" value="#2D3137"></div>
+        </div>
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-label">Фон превью</div>
+        <div class="bg-row" id="bgRow">
+          <button class="bg-btn active" data-bg="#ffffff" style="background:#fff;color:#1c1c1e">Белый</button>
+          <button class="bg-btn" data-bg="#f5f5f7" style="background:#f5f5f7;color:#1c1c1e">Серый</button>
+          <button class="bg-btn" data-bg="#1c1c1e" style="background:#1c1c1e;color:#fff">Тёмный</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">График анимации</div>
+      <svg id="graphSvg" viewBox="0 0 272 160" xmlns="http://www.w3.org/2000/svg"></svg>
+      <div class="graph-actions">
+        <button class="btn btn-primary" id="downloadSvg">Скачать SVG</button>
+        <button class="btn btn-secondary" id="downloadPng">Скачать PNG</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Код для разработчиков</div>
+      <pre class="code-block" id="cssCode"></pre>
+      <button class="btn btn-secondary" id="copyBtn">Скопировать CSS</button>
+      <div class="copy-hint" id="copyHint"></div>
     </div>
   </div>
 
-  <div class="divider"></div>
+  <!-- ── RIGHT: Spinner ── -->
+  <div class="col">
+    <div class="col-header">Спиннер</div>
 
-  <div class="ctrl">
-    <div class="ctrl-label">Скорость <span id="speedVal">1.2s</span></div>
-    <input type="range" id="speed" min="0.3" max="3" step="0.05" value="1.2">
-  </div>
-  <div class="ctrl">
-    <div class="ctrl-label">Размер точки (малая) <span id="smallVal">4px</span></div>
-    <input type="range" id="smallSize" min="2" max="16" step="1" value="4">
-  </div>
-  <div class="ctrl">
-    <div class="ctrl-label">Активная точка (большая) <span id="largeVal">8px</span></div>
-    <input type="range" id="largeSize" min="4" max="28" step="1" value="8">
-  </div>
-  <div class="ctrl">
-    <div class="ctrl-label">Расстояние <span id="gapVal">6px</span></div>
-    <input type="range" id="gap" min="2" max="28" step="1" value="6">
-  </div>
-  <div class="ctrl">
-    <div class="ctrl-label">Количество точек <span id="countVal">4</span></div>
-    <input type="range" id="dotCount" min="2" max="8" step="1" value="4">
-  </div>
-
-  <div class="divider"></div>
-
-  <div class="ctrl">
-    <div class="ctrl-label">Цвет</div>
-    <div class="swatches" id="swatches">
-      <div class="swatch active" data-color="#2D3137" style="background:#2D3137"></div>
-      <div class="swatch" data-color="#007AFF" style="background:#007AFF"></div>
-      <div class="swatch" data-color="#34C759" style="background:#34C759"></div>
-      <div class="swatch" data-color="#FF3B30" style="background:#FF3B30"></div>
-      <div class="swatch" data-color="#FF9500" style="background:#FF9500"></div>
-      <div class="swatch" data-color="#AF52DE" style="background:#AF52DE"></div>
-      <div class="swatch" data-color="#ffffff" style="background:#fff;border:2px solid #e5e5ea"></div>
-      <div class="swatch-custom"><input type="color" id="customColor" value="#2D3137"></div>
+    <div class="loader-wrap" id="spinnerWrap">
+      <div class="spinner" id="spinner"></div>
     </div>
-  </div>
 
-  <div class="ctrl">
-    <div class="ctrl-label">Фон превью</div>
-    <div class="bg-row" id="bgRow">
-      <button class="bg-btn active" data-bg="#ffffff" style="background:#fff;color:#1c1c1e">Белый</button>
-      <button class="bg-btn" data-bg="#f5f5f7" style="background:#f5f5f7;color:#1c1c1e">Серый</button>
-      <button class="bg-btn" data-bg="#1c1c1e" style="background:#1c1c1e;color:#fff">Тёмный</button>
+    <div class="panel">
+      <div class="panel-title">Параметры</div>
+      <div class="ctrl">
+        <div class="ctrl-label">Скорость <span id="spSpeedVal">1.0s</span></div>
+        <input type="range" id="spSpeed" min="0.2" max="4" step="0.05" value="1">
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-label">Размер <span id="spSizeVal">32px</span></div>
+        <input type="range" id="spSize" min="12" max="80" step="2" value="32">
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-label">Толщина кольца <span id="spThickVal">25%</span></div>
+        <input type="range" id="spThick" min="5" max="48" step="1" value="25">
+      </div>
+      <div class="divider"></div>
+      <div class="ctrl">
+        <div class="ctrl-label">Цвет</div>
+        <div class="swatches" id="spSwatches">
+          <div class="swatch active" data-color="#2D3137" style="background:#2D3137"></div>
+          <div class="swatch" data-color="#007AFF" style="background:#007AFF"></div>
+          <div class="swatch" data-color="#34C759" style="background:#34C759"></div>
+          <div class="swatch" data-color="#FF3B30" style="background:#FF3B30"></div>
+          <div class="swatch" data-color="#FF9500" style="background:#FF9500"></div>
+          <div class="swatch" data-color="#AF52DE" style="background:#AF52DE"></div>
+          <div class="swatch" data-color="#ffffff" style="background:#fff;border:2px solid #e5e5ea"></div>
+          <div class="swatch-custom"><input type="color" id="spCustomColor" value="#2D3137"></div>
+        </div>
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-label">Фон превью</div>
+        <div class="bg-row" id="spBgRow">
+          <button class="bg-btn active" data-bg="#ffffff" style="background:#fff;color:#1c1c1e">Белый</button>
+          <button class="bg-btn" data-bg="#f5f5f7" style="background:#f5f5f7;color:#1c1c1e">Серый</button>
+          <button class="bg-btn" data-bg="#1c1c1e" style="background:#1c1c1e;color:#fff">Тёмный</button>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
-<!-- Timeline graph -->
-<div class="panel">
-  <div class="panel-title">График анимации</div>
-  <svg id="graphSvg" viewBox="0 0 272 160" xmlns="http://www.w3.org/2000/svg"></svg>
-  <div class="graph-actions">
-    <button class="btn btn-primary" id="downloadSvg">Скачать SVG</button>
-    <button class="btn btn-secondary" id="downloadPng">Скачать PNG</button>
-  </div>
-</div>
-
-<!-- CSS Export for developers -->
-<div class="panel">
-  <div class="panel-title">Код для разработчиков</div>
-  <pre class="code-block" id="cssCode"></pre>
-  <button class="btn btn-secondary" id="copyBtn">Скопировать CSS</button>
-  <div class="copy-hint" id="copyHint"></div>
-</div>
-
-<!-- ════ SPINNER SECTION ════ -->
-<div class="section-label">Спиннер</div>
-
-<!-- Spinner preview -->
-<div class="loader-wrap" id="spinnerWrap">
-  <div class="spinner" id="spinner"></div>
-</div>
-
-<!-- Spinner controls -->
-<div class="panel">
-  <div class="panel-title">Параметры</div>
-
-  <div class="ctrl">
-    <div class="ctrl-label">Скорость <span id="spSpeedVal">1.0s</span></div>
-    <input type="range" id="spSpeed" min="0.2" max="4" step="0.05" value="1">
-  </div>
-
-  <div class="ctrl">
-    <div class="ctrl-label">Размер <span id="spSizeVal">32px</span></div>
-    <input type="range" id="spSize" min="12" max="80" step="2" value="32">
-  </div>
-
-  <div class="ctrl">
-    <div class="ctrl-label">Толщина кольца <span id="spThickVal">25%</span></div>
-    <input type="range" id="spThick" min="5" max="48" step="1" value="25">
-  </div>
-
-  <div class="divider"></div>
-
-  <div class="ctrl">
-    <div class="ctrl-label">Цвет</div>
-    <div class="swatches" id="spSwatches">
-      <div class="swatch active" data-color="#2D3137" style="background:#2D3137"></div>
-      <div class="swatch" data-color="#007AFF" style="background:#007AFF"></div>
-      <div class="swatch" data-color="#34C759" style="background:#34C759"></div>
-      <div class="swatch" data-color="#FF3B30" style="background:#FF3B30"></div>
-      <div class="swatch" data-color="#FF9500" style="background:#FF9500"></div>
-      <div class="swatch" data-color="#AF52DE" style="background:#AF52DE"></div>
-      <div class="swatch" data-color="#ffffff" style="background:#fff;border:2px solid #e5e5ea"></div>
-      <div class="swatch-custom"><input type="color" id="spCustomColor" value="#2D3137"></div>
+    <div class="panel">
+      <div class="panel-title">Код для разработчиков</div>
+      <pre class="code-block" id="spCssCode"></pre>
+      <button class="btn btn-secondary" id="spCopyBtn">Скопировать CSS</button>
+      <div class="copy-hint" id="spCopyHint"></div>
     </div>
-  </div>
 
-  <div class="ctrl">
-    <div class="ctrl-label">Фон превью</div>
-    <div class="bg-row" id="spBgRow">
-      <button class="bg-btn active" data-bg="#ffffff" style="background:#fff;color:#1c1c1e">Белый</button>
-      <button class="bg-btn" data-bg="#f5f5f7" style="background:#f5f5f7;color:#1c1c1e">Серый</button>
-      <button class="bg-btn" data-bg="#1c1c1e" style="background:#1c1c1e;color:#fff">Тёмный</button>
-    </div>
-  </div>
-</div>
-
-<!-- Spinner CSS export -->
-<div class="panel">
-  <div class="panel-title">Код для разработчиков</div>
-  <pre class="code-block" id="spCssCode"></pre>
-  <button class="btn btn-secondary" id="spCopyBtn">Скопировать CSS</button>
-  <div class="copy-hint" id="spCopyHint"></div>
-</div>
+  </div><!-- /col right -->
+</div><!-- /layout -->
 
 <script>
 // ── State ──
