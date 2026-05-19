@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Островок — Прототип</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      background: #d0d0d0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    #phone {
+      width: 393px;
+      height: 852px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 52px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.35), 0 0 0 1px rgba(0,0,0,0.12);
+      flex-shrink: 0;
+    }
+
+    .screen {
+      position: absolute;
+      inset: 0;
+      width: 393px;
+      height: 852px;
+      display: none;
+      overflow: hidden;
+    }
+    .screen.active { display: block; }
+
+    /* ── Status bar ── */
+    .status-bar {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 50;
+    }
+    .s-time {
+      width: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 18px;
+      font-size: 17px;
+      font-weight: 600;
+      color: #333;
+      letter-spacing: -0.3px;
+    }
+    .s-island {
+      width: 110px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .s-island img { height: 30px; object-fit: contain; }
+    .s-icons {
+      width: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .s-icons img { height: 13px; object-fit: contain; }
+
+    /* ── Home indicator ── */
+    .home-ind {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      height: 34px;
+      padding-bottom: 8px;
+    }
+    .home-ind-bar {
+      width: 134px;
+      height: 5px;
+      background: #333;
+      border-radius: 100px;
+      opacity: 0.5;
+    }
+
+    /* ── Buttons ── */
+    .btn {
+      border: none;
+      border-radius: 22px;
+      font-size: 16px;
+      height: 55px;
+      width: 100%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: opacity 0.12s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:active { opacity: 0.75; }
+    .btn-blue  { background: #0d41d2; color: #fff; font-weight: 500; }
+    .btn-vk    { background: #0077ff; color: #fff; font-weight: 500; }
+    .btn-ghost { background: rgba(13,65,210,0.1); color: #0d41d2; font-weight: 500; }
+
+    .btn-cta {
+      border: none;
+      border-radius: 22px;
+      background: #0d41d2;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      height: 65px;
+      width: 100%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.12s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-cta:active { opacity: 0.75; }
+
+    .skip-link {
+      font-size: 16px;
+      font-weight: 500;
+      color: #333;
+      cursor: pointer;
+      padding: 15px 40px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* ── Screen 3: scroll area ── */
+    .scroll-wrap {
+      position: absolute;
+      inset: 0;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .scroll-wrap::-webkit-scrollbar { display: none; }
+
+    /* ── Screen 3: fixed bottom panel ── */
+    .fixed-bottom {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: white;
+      padding: 16px 20px 0;
+      z-index: 50;
+    }
+
+    /* ── GURU badge pill ── */
+    .guru-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      background: linear-gradient(99deg, #6a52ff 2%, #005be5 99%);
+      border-radius: 50px;
+      padding: 3px 8px 3px 5px;
+      opacity: 0.9;
+    }
+    .guru-pill img { width: 18px; height: 18px; object-fit: contain; }
+    .guru-pill span { font-size: 16px; font-weight: 700; color: #fff; white-space: nowrap; }
+
+    /* ── Level card ── */
+    .level-card {
+      background: #fff;
+      border-radius: 22px;
+      padding: 20px 15px;
+      position: relative;
+      overflow: hidden;
+    }
+    .level-card-img {
+      position: absolute;
+      right: -30px; top: -10px;
+      width: 115px; height: 115px;
+      opacity: 0.2;
+      pointer-events: none;
+      object-fit: contain;
+    }
+
+    /* ── Check row ── */
+    .check-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 18px;
+      color: #333;
+      line-height: 1.2;
+    }
+    .check-row::before {
+      content: '✦';
+      font-size: 10px;
+      color: #0d41d2;
+      flex-shrink: 0;
+    }
+
+    /* ── Benefit chip ── */
+    .benefit-chip {
+      background: #fff;
+      border-radius: 22px;
+      padding: 10px 15px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .benefit-chip img { width: 24px; height: 24px; flex-shrink: 0; }
+    .benefit-chip span {
+      font-size: 18px;
+      font-weight: 500;
+      background: linear-gradient(143deg, #4225f2, #0460ea);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+<div id="phone">
+
+  <!-- ══════════════════════════════════════
+       SCREEN 1 — Сплэш
+  ══════════════════════════════════════ -->
+  <div id="screen1" class="screen active" style="background:#acef81; cursor:pointer;" onclick="goTo('screen2')">
+    <div class="status-bar">
+      <div class="s-time">10:00</div>
+      <div class="s-island">
+        <img src="https://www.figma.com/api/mcp/asset/1096cffd-582f-4a5b-9469-59753a960c83" alt="">
+      </div>
+      <div class="s-icons">
+        <img src="https://www.figma.com/api/mcp/asset/83e70749-d1e2-4c91-a2c3-b233b09d186b" alt="">
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; justify-content:center; height:100%;">
+      <img src="https://www.figma.com/api/mcp/asset/88cbd540-90bb-41bd-87d3-e684d09b0da8"
+           style="width:243px; object-fit:contain;" alt="Островок!">
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       SCREEN 2 — Авторизация
+  ══════════════════════════════════════ -->
+  <div id="screen2" class="screen" style="background:#fff;">
+    <div class="status-bar" style="background:#fff;">
+      <div class="s-time">10:00</div>
+      <div class="s-island">
+        <img src="https://www.figma.com/api/mcp/asset/494dbb8b-a8ae-4064-8b8a-3fcd09c7689a" alt="">
+      </div>
+      <div class="s-icons">
+        <img src="https://www.figma.com/api/mcp/asset/88d3bb28-251d-433d-8c8a-0a5bacb9cd9a" alt="">
+      </div>
+    </div>
+
+    <div style="display:flex; flex-direction:column; height:100%; padding-top:80px;">
+      <div style="flex:1; display:flex; flex-direction:column; align-items:center; padding:10px 0 0; overflow-y:auto;">
+
+        <!-- Заголовок + GURU -->
+        <div style="display:flex; flex-direction:column; align-items:center; gap:4px; margin-bottom:40px; width:335px;">
+          <div style="font-size:32px; font-weight:600; color:#333; text-align:center; line-height:1.25;">
+            Скидки <span style="color:#0d41d2; font-weight:700;">до 40%</span><br>
+            сразу после входа<br>
+            по программе лояльности
+          </div>
+          <div style="margin-top:4px;">
+            <img src="https://www.figma.com/api/mcp/asset/92959c84-96da-4a04-b870-edecc12a37d8"
+                 style="height:48px; object-fit:contain;" alt="GURU">
+          </div>
+        </div>
+
+        <!-- Подзаголовок + кнопки -->
+        <div style="display:flex; flex-direction:column; gap:30px; width:100%;">
+          <p style="font-size:22px; color:#333; text-align:center; line-height:1.3; padding:0 29px;">
+            Авторизуйтесь и сразу увидите лучшие цены
+          </p>
+          <div style="display:flex; flex-direction:column; gap:10px; padding:0 30px;">
+            <button class="btn btn-vk" onclick="goTo('screen3')">
+              <img src="https://www.figma.com/api/mcp/asset/12e5210f-9dc9-4439-ab10-92d47cb0dac5"
+                   style="width:18px;height:18px;object-fit:contain;" alt="">
+              VK ID
+            </button>
+            <button class="btn btn-blue" onclick="goTo('screen3')">
+              <img src="https://www.figma.com/api/mcp/asset/061de542-c001-4495-82fc-765669b0461d"
+                   style="width:18px;height:18px;object-fit:contain;" alt="">
+              Войти через почту
+            </button>
+            <button class="btn btn-ghost" onclick="goTo('screen3')">
+              Ещё 3 способа
+              <img src="https://www.figma.com/api/mcp/asset/e89b59c3-15e9-40f8-b09f-b70a629fd3b2"
+                   style="width:18px;height:18px;object-fit:contain;" alt="">
+            </button>
+            <button class="btn btn-ghost" onclick="goTo('screen3')">
+              Зарегистрироваться
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Пропустить → экран 4 -->
+      <div style="display:flex; flex-direction:column; align-items:center;">
+        <span class="skip-link" onclick="goTo('screen4')">Пропустить</span>
+        <div class="home-ind"><div class="home-ind-bar"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       SCREEN 3 — GURU Лояльность (скролл)
+  ══════════════════════════════════════ -->
+  <div id="screen3" class="screen" style="background:#fff;">
+    <!-- Фиксированный статус-бар -->
+    <div class="status-bar" style="background:#fff;">
+      <div class="s-time">10:00</div>
+      <div class="s-island">
+        <img src="https://www.figma.com/api/mcp/asset/2959107f-74ff-4e6a-8c46-531cd77c5914" alt="">
+      </div>
+      <div class="s-icons">
+        <img src="https://www.figma.com/api/mcp/asset/5cbe5e43-d0a9-48b9-97cc-50501fa9a549" alt="">
+      </div>
+    </div>
+
+    <!-- Скроллируемый контент (отступ снизу = высота фиксированной кнопки) -->
+    <div class="scroll-wrap" style="padding-top:54px; padding-bottom:120px;">
+
+      <!-- Иллюстрация -->
+      <div style="display:flex; justify-content:center; padding:30px 0 10px;">
+        <img src="https://www.figma.com/api/mcp/asset/44e59139-904b-4230-a193-773ab39b93b7"
+             style="width:221px; height:auto; object-fit:contain;" alt="">
+      </div>
+
+      <!-- Заголовок уровня -->
+      <div style="display:flex; flex-direction:column; align-items:center; padding:0 20px 30px;">
+        <p style="font-size:32px; font-weight:600; color:#0d41d2; text-align:center;">Вы — GURU 1</p>
+        <p style="font-size:32px; font-weight:600; color:#333; text-align:center; line-height:1.2;">
+          Скидки до 10%<br>подключены!
+        </p>
+      </div>
+
+      <!-- Основной контент -->
+      <div style="padding:0 20px; display:flex; flex-direction:column; gap:30px;">
+
+        <!-- Описание -->
+        <p style="font-size:22px; color:#333; text-align:center; line-height:1.35;">
+          Чем больше поездок, тем больше выгода, а полученные уровни с вами
+          <span style="color:#0d41d2; font-weight:500;">навсегда</span>
+        </p>
+
+        <!-- Карточки уровней GURU -->
+        <div style="background:linear-gradient(to bottom, rgba(218,255,195,0.9), rgba(187,253,202,0.9)); border-radius:42px; padding:20px; display:flex; flex-direction:column; gap:20px;">
+
+          <!-- GURU 2 -->
+          <div style="display:flex; flex-direction:column; gap:15px;">
+            <p style="font-size:18px; font-weight:500; color:#333; padding-left:15px;">После 2-ой поездки</p>
+            <div class="level-card">
+              <img class="level-card-img" src="https://www.figma.com/api/mcp/asset/88c9afc7-f31c-4509-ae7d-6981a8023ebd" alt="">
+              <div style="display:flex; flex-direction:column; gap:10px;">
+                <div class="guru-pill">
+                  <img src="https://www.figma.com/api/mcp/asset/5f1bf781-cc80-48df-b986-41b3ae010d84" alt="">
+                  <span>GURU 2</span>
+                </div>
+                <p style="font-size:22px; font-weight:600; color:#0d41d2;">Скидка до 15%</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- GURU 3 -->
+          <div style="display:flex; flex-direction:column; gap:15px;">
+            <p style="font-size:18px; font-weight:500; color:#333; padding-left:15px;">После 4-ой поездки</p>
+            <div class="level-card">
+              <img class="level-card-img" src="https://www.figma.com/api/mcp/asset/ef18a9ac-1f5b-4b01-9b73-9721271e23e7" alt="">
+              <div style="display:flex; flex-direction:column; gap:10px;">
+                <div class="guru-pill">
+                  <img src="https://www.figma.com/api/mcp/asset/5f1bf781-cc80-48df-b986-41b3ae010d84" alt="">
+                  <span>GURU 3</span>
+                </div>
+                <p style="font-size:22px; font-weight:600; color:#0d41d2;">Скидка до 20%</p>
+                <div style="display:flex; flex-direction:column; gap:6px; margin-top:4px;">
+                  <div class="check-row">Бонусы от отеля</div>
+                  <div class="check-row">Приоритетная поддержка</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- GURU 4 -->
+          <div style="display:flex; flex-direction:column; gap:15px;">
+            <p style="font-size:18px; font-weight:500; color:#333; padding-left:15px;">После 12-ой поездки</p>
+            <div class="level-card">
+              <img class="level-card-img" src="https://www.figma.com/api/mcp/asset/bedd52eb-368b-402c-b9f9-c44153130cd8" alt="">
+              <div style="display:flex; flex-direction:column; gap:10px;">
+                <div class="guru-pill">
+                  <img src="https://www.figma.com/api/mcp/asset/5f1bf781-cc80-48df-b986-41b3ae010d84" alt="">
+                  <span>GURU 4</span>
+                </div>
+                <p style="font-size:22px; font-weight:600; color:#0d41d2;">Скидка до 40%</p>
+                <div style="display:flex; flex-direction:column; gap:6px; margin-top:4px;">
+                  <div class="check-row">Ещё больше бонусов от отеля</div>
+                  <div class="check-row">Приоритетная поддержка</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Бонусы от отелей -->
+        <div style="background:linear-gradient(118deg, rgba(148,176,251,0.2) 28%, rgba(189,150,243,0.2) 72%); border-radius:42px; padding:30px 20px; display:flex; flex-direction:column; gap:30px;">
+          <p style="font-size:22px; font-weight:500; color:#333; text-align:center; line-height:1.3;">
+            Бесплатные бонусы от отелей и квартир.
+            <span style="color:#0d41d2;"> Выше уровень — больше бонусов</span>
+          </p>
+          <div style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center;">
+            <div class="benefit-chip">
+              <img src="https://www.figma.com/api/mcp/asset/748502c1-217a-45c8-996f-ad1f9e6fc24c" alt="">
+              <span>Улучшение номера</span>
+            </div>
+            <div class="benefit-chip">
+              <img src="https://www.figma.com/api/mcp/asset/a549b05e-c71e-4543-b388-b703d7ec1e2b" alt="">
+              <span>Завтрак, обед, ужин</span>
+            </div>
+            <div class="benefit-chip">
+              <img src="https://www.figma.com/api/mcp/asset/832611cf-5eb7-43da-a765-fc6c27ee2822" alt="">
+              <span>Комплимент при заезде</span>
+            </div>
+            <div class="benefit-chip">
+              <img src="https://www.figma.com/api/mcp/asset/add57f1d-fc13-47af-8e72-2db100f6a782" alt="">
+              <span>Парковка</span>
+            </div>
+            <div class="benefit-chip">
+              <img src="https://www.figma.com/api/mcp/asset/717db997-7138-4cc6-a785-3f40dcdd5222" alt="">
+              <span>Ранний заезд</span>
+            </div>
+            <div class="benefit-chip">
+              <img src="https://www.figma.com/api/mcp/asset/9e89794a-5080-4b5d-ab8a-dbcf04b64398" alt="">
+              <span>Поздний выезд</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Баллы GURU -->
+        <div style="background:linear-gradient(134deg, rgba(227,243,255,0.8) 4%, rgba(218,231,252,0.8) 97%); border-radius:42px; padding:40px 20px 30px; display:flex; flex-direction:column; gap:35px; align-items:center; margin-bottom:10px;">
+          <!-- Перекрывающиеся фото отелей -->
+          <div style="position:relative; width:181px; height:101px; flex-shrink:0;">
+            <img src="https://www.figma.com/api/mcp/asset/59c26918-9be1-47ad-8d1c-8ab706794f80"
+                 style="width:102px; height:101px; object-fit:cover; border-radius:14px; position:absolute; left:0; z-index:3;" alt="">
+            <img src="https://www.figma.com/api/mcp/asset/248c4891-f2f1-4c98-8d73-ea273c2a818e"
+                 style="width:102px; height:101px; object-fit:cover; border-radius:14px; position:absolute; left:39px; z-index:2;" alt="">
+            <img src="https://www.figma.com/api/mcp/asset/1846e656-9573-49a5-a3da-35e5015fc187"
+                 style="width:102px; height:101px; object-fit:cover; border-radius:14px; position:absolute; left:78px; z-index:1;" alt="">
+          </div>
+          <div style="display:flex; flex-direction:column; gap:25px; align-items:center; width:100%;">
+            <p style="font-size:22px; font-weight:500; color:#333; text-align:center; line-height:1.4;">
+              Баллы GURU — для особенно выгодных бронирований. Ими можно оплачивать заказы
+            </p>
+            <div style="background:rgba(255,255,255,0.9); border-radius:20px; padding:3px 14px;">
+              <span style="font-size:18px; font-weight:500; color:#0d41d2;">1 балл = 1 рубль</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Кнопка «В путешествие!» прибита к низу -->
+    <div class="fixed-bottom">
+      <button class="btn-cta" onclick="goTo('screen4')">В путешествие!</button>
+      <div class="home-ind"><div class="home-ind-bar"></div></div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       SCREEN 4 — Push-уведомления
+  ══════════════════════════════════════ -->
+  <div id="screen4" class="screen" style="background:#fff;">
+    <div class="status-bar" style="background:#fff;">
+      <div class="s-time">10:00</div>
+      <div class="s-island">
+        <img src="https://www.figma.com/api/mcp/asset/aa8e8c23-8547-4470-a323-856a1c7db24a" alt="">
+      </div>
+      <div class="s-icons">
+        <img src="https://www.figma.com/api/mcp/asset/2b26572d-60c9-44db-b308-7cdfb6f7f538" alt="">
+      </div>
+    </div>
+
+    <div style="display:flex; flex-direction:column; height:100%; padding:120px 29px 0;">
+      <!-- Иконка колокольчика с бейджем -->
+      <div style="display:flex; justify-content:center; margin-bottom:40px;">
+        <div style="position:relative; width:107px; height:121px;">
+          <img src="https://www.figma.com/api/mcp/asset/1d521455-c6d5-41b3-b8e2-1dca631e4727"
+               style="width:104px; height:118px; object-fit:contain; position:absolute; bottom:0; left:0;" alt="">
+          <img src="https://www.figma.com/api/mcp/asset/dc8d323b-6974-4543-8abd-a9e8f07cb228"
+               style="width:42px; height:42px; object-fit:contain; position:absolute; top:0; right:0;" alt="">
+        </div>
+      </div>
+
+      <!-- Текст -->
+      <div style="flex:1; display:flex; flex-direction:column; gap:30px;">
+        <h1 style="font-size:32px; font-weight:600; color:#333; text-align:center; line-height:1.2;">
+          Включите<br>push-уведомления
+        </h1>
+        <p style="font-size:22px; color:#333; text-align:center; line-height:1.35;">
+          Сможем оперативно сообщать вам об изменении статусов ваших бронирований и о других важных событиях
+        </p>
+      </div>
+
+      <!-- Кнопки внизу -->
+      <div style="display:flex; flex-direction:column; align-items:center; padding-top:15px;">
+        <button class="btn btn-blue">Включить</button>
+        <span class="skip-link">Пропустить</span>
+        <div class="home-ind"><div class="home-ind-bar"></div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function goTo(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    const el = document.getElementById(id);
+    el.classList.add('active');
+    const sw = el.querySelector('.scroll-wrap');
+    if (sw) sw.scrollTop = 0;
+  }
+</script>
+</body>
+</html>
