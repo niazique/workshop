@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analytics — Hotel Paradise</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #f4f4f4;
+      font-family: 'PT Root UI', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: #2d3137;
+      min-height: 100vh;
+    }
+
+    /* ── Layout ─────────────────────────────────────── */
+    .page {
+      padding: 0 120px;
+    }
+
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding: 16px 40px 60px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      width: 100%;
+    }
+
+    /* ── Header pill ─────────────────────────────────── */
+    .header-pill {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 6px 32px;
+      overflow: clip;
+    }
+
+    .hotel-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .hotel-name {
+      font-size: 16px;
+      font-weight: 500;
+      color: #2d3137;
+      white-space: nowrap;
+    }
+
+    /* ── Main analytics card ─────────────────────────── */
+    .main-card {
+      padding: 32px 40px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      overflow: clip;
+    }
+
+    /* Title row */
+    .top-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+
+    .title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .title-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .page-title {
+      font-size: 40px;
+      line-height: 44px;
+      font-weight: 700;
+      color: #2d3137;
+    }
+
+    .beta-badge {
+      background: #ebe9fd;
+      color: #695dd8;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 2px 6px;
+      border-radius: 6px;
+      line-height: 20px;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      font-weight: 500;
+      color: #868686;
+      line-height: 22px;
+    }
+
+    .btn-request {
+      background: #ebe9fd;
+      color: #2d3137;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      font-family: inherit;
+      padding: 0 16px;
+      border-radius: 12px;
+      height: 48px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .btn-request:hover { background: #ddd9fb; }
+
+    /* ── Monthly summary ─────────────────────────────── */
+    .section-label {
+      font-size: 18px;
+      font-weight: 700;
+      color: #2d3137;
+      line-height: 22px;
+    }
+    .section-label .muted { color: #c8c8c8; }
+
+    .monthly-block {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .metrics-card {
+      border: 1px solid #e5e5e5;
+      border-radius: 20px;
+      padding: 24px 20px;
+    }
+
+    .metrics-row {
+      display: flex;
+      align-items: stretch;
+    }
+
+    .metric {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 0 16px;
+    }
+    .metric:first-child { padding-left: 0; }
+    .metric:last-child  { padding-right: 0; }
+
+    .metric-sep {
+      width: 1px;
+      background: #e5e5e5;
+    }
+
+    .metric-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: #2d3137;
+      line-height: 22px;
+      white-space: nowrap;
+    }
+
+    .metric-val {
+      font-size: 24px;
+      font-weight: 700;
+      color: #2d3137;
+      line-height: 30px;
+    }
+
+    .metric-delta {
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 22px;
+    }
+    .metric-delta .neg  { color: #ce2121; }
+    .metric-delta .pos  { color: #53af24; }
+    .metric-delta .gray { color: #868686; }
+
+    /* ── Chart section ────────────────────────────────── */
+    .chart-section {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 16px;
+      border-bottom: 1px solid #e5e5e5;
+    }
+
+    .tab-btn {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+      padding-top: 2px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .tab-label {
+      font-size: 16px;
+      font-weight: 700;
+      color: #868686;
+      white-space: nowrap;
+      line-height: 22px;
+    }
+
+    .tab-bar {
+      height: 4px;
+      width: 100%;
+      background: #695dd8;
+      border-radius: 4px 4px 0 0;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+
+    .tab-btn.active .tab-label { color: #2d3137; }
+    .tab-btn.active .tab-bar   { opacity: 1; }
+
+    /* Chart body */
+    .chart-body {
+      padding: 24px 0 0;
+    }
+
+    .chart-inner {
+      display: flex;
+      gap: 8px;
+      align-items: stretch;
+    }
+
+    .y-labels {
+      width: 54px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 200px;
+    }
+
+    .y-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: #2d3137;
+      text-align: right;
+      line-height: 16px;
+    }
+
+    .chart-plot {
+      flex: 1;
+      position: relative;
+      height: 200px;
+    }
+
+    .gridline {
+      position: absolute;
+      left: 0; right: 0;
+      height: 1px;
+      background: #e5e5e5;
+    }
+    .gridline-0   { top: 0; }
+    .gridline-25  { top: 25%; }
+    .gridline-50  { top: 50%; }
+    .gridline-75  { top: 75%; }
+    .gridline-100 { top: 100%; }
+
+    .chart-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    .months-row {
+      display: flex;
+      justify-content: space-between;
+      padding-left: 62px;
+      margin-top: 16px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #2d3137;
+    }
+
+    .months-row span { line-height: 16px; }
+
+    /* Legend */
+    .chart-legend {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      align-items: center;
+      margin-top: 24px;
+      padding-bottom: 16px;
+    }
+
+    .legend-item {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .legend-line-solid {
+      width: 24px;
+      height: 2px;
+      background: #695dd8;
+    }
+
+    .legend-line-dashed {
+      width: 24px;
+      height: 0;
+      border-top: 2px dashed #695dd8;
+    }
+
+    .legend-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: #2d3137;
+      line-height: 20px;
+    }
+
+    /* ── Market insights card ─────────────────────────── */
+    .market-card {
+      padding: 32px 40px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .market-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #2d3137;
+      line-height: 30px;
+    }
+    .market-title .muted { color: #c8c8c8; }
+
+    .insight-grid {
+      display: flex;
+      gap: 20px;
+    }
+
+    .insight-col {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .insight-card {
+      border: 1px solid #e5e5e5;
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      gap: 40px;
+      align-items: flex-start;
+    }
+
+    .insight-meta {
+      width: 220px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-self: stretch;
+      gap: 16px;
+    }
+
+    .insight-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #2d3137;
+      line-height: 22px;
+    }
+
+    .insight-tip {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .tip-text {
+      font-size: 16px;
+      font-weight: 500;
+      color: #868686;
+      line-height: 22px;
+    }
+    .tip-text a {
+      color: #4540e4;
+      text-decoration: none;
+    }
+    .tip-text a:hover { text-decoration: underline; }
+
+    .insight-bars {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .bar-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .bar-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      font-weight: 500;
+      color: #2d3137;
+      line-height: 20px;
+      white-space: nowrap;
+    }
+
+    .bar-track {
+      height: 8px;
+      background: #e5e5e5;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 8px;
+      background: #695dd8;
+      border-radius: 6px;
+      transition: width 0.4s ease;
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="stack">
+
+    <!-- ── Header pill ─────────────────────────── -->
+    <div class="card header-pill">
+      <img
+        class="hotel-avatar"
+        src="https://www.figma.com/api/mcp/asset/3110b0fd-ae0b-40b7-9355-ba254297276e"
+        alt="Hotel Paradise"
+      >
+      <span class="hotel-name">Hotel Paradise</span>
+    </div>
+
+    <!-- ── Main analytics card ──────────────────── -->
+    <div class="card main-card">
+
+      <!-- Title + button -->
+      <div class="top-row">
+        <div class="title-block">
+          <div class="title-row">
+            <h1 class="page-title">Analytics</h1>
+            <span class="beta-badge">Beta</span>
+          </div>
+          <p class="subtitle">Updates every week. Last update April 27, 2026</p>
+        </div>
+        <button class="btn-request">Request detailed analytics</button>
+      </div>
+
+      <!-- Monthly summary -->
+      <div class="monthly-block">
+        <div class="section-label">Monthly insights <span class="muted">·</span> April</div>
+        <div class="metrics-card">
+          <div class="metrics-row">
+            <div class="metric">
+              <div class="metric-name">Views</div>
+              <div>
+                <div class="metric-val">1,932</div>
+                <div class="metric-delta"><span class="neg">-2% </span><span class="gray">from March</span></div>
+              </div>
+            </div>
+            <div class="metric-sep"></div>
+            <div class="metric">
+              <div class="metric-name">Visits</div>
+              <div>
+                <div class="metric-val">432</div>
+                <div class="metric-delta"><span class="pos">+10% </span><span class="gray">from March</span></div>
+              </div>
+            </div>
+            <div class="metric-sep"></div>
+            <div class="metric">
+              <div class="metric-name">Bookings</div>
+              <div>
+                <div class="metric-val">101</div>
+                <div class="metric-delta"><span class="pos">+3% </span><span class="gray">from March</span></div>
+              </div>
+            </div>
+            <div class="metric-sep"></div>
+            <div class="metric">
+              <div class="metric-name">Cancellation rate</div>
+              <div>
+                <div class="metric-val">2%</div>
+                <div class="metric-delta"><span class="gray">+0 from March</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart section -->
+      <div class="chart-section">
+
+        <!-- Tabs -->
+        <div class="tabs" role="tablist">
+          <button class="tab-btn active" role="tab">
+            <span class="tab-label">Search views</span>
+            <div class="tab-bar"></div>
+          </button>
+          <button class="tab-btn" role="tab">
+            <span class="tab-label">Page visits</span>
+            <div class="tab-bar"></div>
+          </button>
+          <button class="tab-btn" role="tab">
+            <span class="tab-label">Created bookings</span>
+            <div class="tab-bar"></div>
+          </button>
+          <button class="tab-btn" role="tab">
+            <span class="tab-label">Finished bookings</span>
+            <div class="tab-bar"></div>
+          </button>
+          <button class="tab-btn" role="tab">
+            <span class="tab-label">Cancellation rate</span>
+            <div class="tab-bar"></div>
+          </button>
+          <button class="tab-btn" role="tab">
+            <span class="tab-label">Saves</span>
+            <div class="tab-bar"></div>
+          </button>
+        </div>
+
+        <!-- Chart body -->
+        <div class="chart-body">
+          <div class="chart-inner">
+            <!-- Y-axis labels -->
+            <div class="y-labels" id="y-labels">
+              <span class="y-label" id="yl-0">10,000</span>
+              <span class="y-label" id="yl-1">7,500</span>
+              <span class="y-label" id="yl-2">5,000</span>
+              <span class="y-label" id="yl-3">2,500</span>
+              <span class="y-label" id="yl-4">0</span>
+            </div>
+
+            <!-- Plot area -->
+            <div class="chart-plot">
+              <!-- Gridlines -->
+              <div class="gridline gridline-0"></div>
+              <div class="gridline gridline-25"></div>
+              <div class="gridline gridline-50"></div>
+              <div class="gridline gridline-75"></div>
+              <div class="gridline gridline-100"></div>
+
+              <svg
+                id="chart-svg"
+                class="chart-svg"
+                viewBox="0 0 1050 200"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+              >
+                <defs>
+                  <linearGradient id="areaFill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%"   stop-color="#695dd8" stop-opacity="0.18"/>
+                    <stop offset="100%" stop-color="#695dd8" stop-opacity="0.02"/>
+                  </linearGradient>
+                </defs>
+                <!-- area fill under 2026 line -->
+                <path id="chart-area" fill="url(#areaFill)"/>
+                <!-- 2025 dashed line -->
+                <polyline id="chart-past"
+                  fill="none" stroke="#695dd8" stroke-width="2"
+                  stroke-dasharray="7,5" stroke-opacity="0.45"/>
+                <!-- 2026 solid line -->
+                <polyline id="chart-curr"
+                  fill="none" stroke="#695dd8" stroke-width="2.5" stroke-linejoin="round"/>
+                <!-- 2025 dots -->
+                <g id="dots-past"></g>
+                <!-- 2026 dots -->
+                <g id="dots-curr"></g>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Month labels -->
+          <div class="months-row">
+            <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span>
+            <span>May</span><span>Jun</span><span>Jul</span><span>Aug</span>
+            <span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
+          </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="chart-legend">
+          <div class="legend-item">
+            <div class="legend-line-solid"></div>
+            <span class="legend-label">2026</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-line-dashed"></div>
+            <span class="legend-label">2025</span>
+          </div>
+        </div>
+
+      </div><!-- /chart-section -->
+
+    </div><!-- /main-card -->
+
+    <!-- ── Market insights card ──────────────────── -->
+    <div class="card market-card">
+
+      <div class="market-title">Tbilisi market insights <span class="muted">•</span> April</div>
+
+      <div class="insight-grid">
+
+        <!-- Left column -->
+        <div class="insight-col">
+
+          <!-- Where guests come from -->
+          <div class="insight-card">
+            <div class="insight-meta">
+              <div class="insight-title">Where guests come from</div>
+              <div class="insight-tip">
+                <!-- lightbulb icon -->
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="flex-shrink:0">
+                  <path d="M10 2.5a5.5 5.5 0 0 1 3.25 9.93l-.25.19V14a.75.75 0 0 1-.75.75h-4.5A.75.75 0 0 1 7 14v-1.38l-.25-.19A5.5 5.5 0 0 1 10 2.5z" fill="#868686" opacity="0.35"/>
+                  <path d="M7.75 15.5h4.5M8.5 17.25h3" stroke="#868686" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <div class="tip-text"><a href="#">Add room amenities</a> that international guests may need</div>
+              </div>
+            </div>
+            <div class="insight-bars">
+              <div class="bar-row">
+                <div class="bar-header"><span>Russia</span><span>57.3%</span></div>
+                <div class="bar-track"><div class="bar-fill" style="width:57.3%"></div></div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-header"><span>Others</span><span>13.3%</span></div>
+                <div class="bar-track"><div class="bar-fill" style="width:13.3%"></div></div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-header"><span>Kazakhstan</span><span>10.6%</span></div>
+                <div class="bar-track"><div class="bar-fill" style="width:10.6%"></div></div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-header"><span>Israel</span><span>4.8%</span></div>
+                <div class="bar-track"><div class="bar-fill" style="width:4.8%"></div></div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-header"><span>China</span><span>4.7%</span></div>
+                <div class="bar-track"><div class="bar-fill" style="width:4.7%"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Traveler types -->
+          <div class="insight-card">
+            <div class="insight-meta">
+              <div class="insight-title">Which travelers types choose your city</div>
+              <div class="insight-tip">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="flex-shrink:0">
+                  <path d="M10 2.5a5.5 5.5 0 0 1 3.25 9.93l-.25.19V14a.75.75 0 0 1-.75.75h-4.5A.75.75 0 0 1 7 14v-1.38l-.25-.19A5.5 5.5 0 0 1 10 2.5z" fill="#868686" opacity="0.35"/>
+                  <path d="M7.75 15.5h4.5M8.5 17.25h3" stroke="#868686" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <div class="tip-text"><a href="#">Update hotel policies</a> to attract the guests you want</div>
+              </div>
+            </div>
+            <div class="insight-bars">
+              <div class="bar-row">
+                <div class="bar-header"><span>Solo travelers</span><span>19.1%</span></div>
+                <div class="bar-track"><div class="bar-fill" style="width:19.1%"></div></div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-header"><span>Couples</span><span>28.8%</span></div>
+                <div class="bar-track"><div class="bar-fill" style="width:28.8%"></div></div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-header"><span>Families</span><span>37.6%</span></div>
+                <div class="bar-track"><div class="bar-fill" style="width:37.6%"></div></div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-header"><span>Groups</span><span>2.2%</span></div>
+                <div class="bar-track"><div class="bar-fill" style="width:2.2%"></div></div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-header"><span>B2B</span><span>12.3%</span></div>
+                <div class="bar-track"><div class="bar-fill" style="width:12.3%"></div></div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /left col -->
+
+        <!-- Right column -->
+        <div class="insight-col">
+
+          <!-- Advance booking -->
+          <div class="insight-card">
+            <div class="insight-meta">
+              <div class="insight-title">How far in advance guests book</div>
+              <div class="insight-tip">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="flex-shrink:0">
+                  <path d="M10 2.5a5.5 5.5 0 0 1 3.25 9.93l-.25.19V14a.75.75 0 0 1-.75.75h-4.5A.75.75 0 0 1 7 14v-1.38l-.25-.19A5.5 5.5 0 0 1 10 2.5z" fill="#868686" opacity="0.35"/>
+                  <path d="M7.75 15.5h4.5M8.5 17.25h3" stroke="#868686" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <div class="tip-text"><a href="#">Create special rate</a> to attract more early or last-minute bookings</div>
+              </div>
+            </div>
+            <div class="insight-bars">
+              <div class="bar-row">
+                <div class="bar-header"><span>0–1 day</span><span>25.2%</span></div>
+                <div class="bar-track"><div class="bar-fill" style="width:25.2%"></div></div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-header"><span>2–7 days</span><span>25.7%</span></div>
+                <div class="bar-track"><div class="bar-fill" style="width:25.7%"></div></div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-header"><span>8–30 days</span><span>49.1%</span></div>
+                <div class="bar-track"><div class="bar-fill" style="width:49.1%"></div></div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-header"><span>31–90 days</span><span>0%</span></div>
+                <div class="bar-track"><div class="bar-fill" style="width:0%"></div></div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-header"><span>91+ days</span><span>0%</span></div>
+                <div class="bar-track"><div class="bar-fill" style="width:0%"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Length of stay -->
+          <div class="insight-card">
+            <div class="insight-meta">
+              <div class="insight-title">How long guests stay</div>
+              <div class="insight-tip">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="flex-shrink:0">
+                  <path d="M10 2.5a5.5 5.5 0 0 1 3.25 9.93l-.25.19V14a.75.75 0 0 1-.75.75h-4.5A.75.75 0 0 1 7 14v-1.38l-.25-.19A5.5 5.5 0 0 1 10 2.5z" fill="#868686" opacity="0.35"/>
+                  <path d="M7.75 15.5h4.5M8.5 17.25h3" stroke="#868686" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <div class="tip-text"><a href="#">Create special rate</a> to attract the stays you need</div>
+              </div>
+            </div>
+            <div class="insight-bars">
+              <div class="bar-row">
+                <div class="bar-header"><span>0–1 night</span><span>25.2%</span></div>
+                <div class="bar-track"><div class="bar-fill" style="width:25.2%"></div></div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-header"><span>2–7 nights</span><span>30.7%</span></div>
+                <div class="bar-track"><div class="bar-fill" style="width:30.7%"></div></div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-header"><span>8–14 nights</span><span>29.1%</span></div>
+                <div class="bar-track"><div class="bar-fill" style="width:29.1%"></div></div>
+              </div>
+              <div class="bar-row">
+                <div class="bar-header"><span>15–30 nights</span><span>15%</span></div>
+                <div class="bar-track"><div class="bar-fill" style="width:15%"></div></div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /right col -->
+
+      </div><!-- /insight-grid -->
+
+    </div><!-- /market-card -->
+
+  </div><!-- /stack -->
+</div><!-- /page -->
+
+<script>
+// ── Chart data ────────────────────────────────────────────────────────────────
+// All values in real units; y-pixel = 200 - (value/max)*200
+// 12 data points per series (Jan–Dec); null = no 2026 data yet
+const TABS = [
+  {
+    yLabels: ['10,000', '7,500', '5,000', '2,500', '0'],
+    max: 10000,
+    // 2025 annual (derived from Figma dot positions)
+    past: [10000, 4500, 3200, 3750, 700, 6600, 8100, 8900, 5200, 5200, 10000, 10000],
+    // 2026 partial (Jan–Apr have data; May-Dec = null)
+    curr: [9800, 4200, 3200, 1932, null, null, null, null, null, null, null, null],
+  },
+  {
+    yLabels: ['1,000', '750', '500', '250', '0'],
+    max: 1000,
+    past: [820, 510, 525, 175, 170, 444, 694, 750, 531, 563, 988, 950],
+    curr: [800, 510, 525, 432, null, null, null, null, null, null, null, null],
+  },
+  {
+    yLabels: ['500', '375', '250', '125', '0'],
+    max: 500,
+    past: [182, 149, 207, 117, 98, 110, 130, 98, 149, 162, 178, 191],
+    curr: [207, 180, 160, 101, null, null, null, null, null, null, null, null],
+  },
+  {
+    yLabels: ['500', '375', '250', '125', '0'],
+    max: 500,
+    past: [160, 127, 193, 127, 94, 108, 123, 136, 99, 136, 160, 190],
+    curr: [190, 155, 185, 91, null, null, null, null, null, null, null, null],
+  },
+  {
+    yLabels: ['10%', '7.5%', '5%', '2.5%', '0%'],
+    max: 10,
+    past: [2.1, 1.5, 2.8, 2.8, 2.1, 1.5, 1.5, 1.5, 4.5, 5.6, 4.5, 1.5],
+    curr: [4.0, 3.5, 3.0, 2.0, null, null, null, null, null, null, null, null],
+  },
+  {
+    yLabels: ['50', '37', '25', '12', '0'],
+    max: 50,
+    past: [10.5, 11.8, 14.2, 14, 10.5, 7.4, 7.4, 7.4, 9.4, 14.9, 9.6, 10.5],
+    curr: [14, 12, 15, 12, null, null, null, null, null, null, null, null],
+  },
+];
+
+// X positions for 12 months, evenly spaced 0–1050
+const XS = [0, 95, 191, 286, 382, 477, 573, 668, 764, 859, 955, 1050];
+const CH  = 200; // SVG chart height
+const DUR = 380; // animation duration ms
+
+function toY(value, max) {
+  return value === null ? CH : CH - (value / max) * CH;
+}
+
+// Convert tab data → array of y-pixel values (nulls become CH = baseline)
+function tabToYPx(tab) {
+  return {
+    past: tab.past.map(v => toY(v, tab.max)),
+    curr: tab.curr.map(v => toY(v, tab.max)),
+    nullMask: tab.curr.map(v => v === null),
+  };
+}
+
+// ── Rendering ─────────────────────────────────────────────────────────────────
+const elArea   = document.getElementById('chart-area');
+const elPast   = document.getElementById('chart-past');
+const elCurr   = document.getElementById('chart-curr');
+const elDotsPast = document.getElementById('dots-past');
+const elDotsCurr = document.getElementById('dots-curr');
+const ylEls    = [0,1,2,3,4].map(i => document.getElementById('yl-' + i));
+
+function buildPolylinePoints(ys, mask) {
+  return XS
+    .map((x, i) => (!mask || !mask[i]) ? `${x},${ys[i]}` : null)
+    .filter(Boolean)
+    .join(' ');
+}
+
+function buildAreaPath(ys, mask) {
+  const pts = XS.map((x, i) => ({ x, y: ys[i], skip: mask && mask[i] }))
+               .filter(p => !p.skip);
+  if (!pts.length) return '';
+  const line = pts.map((p, i) => (i === 0 ? `M${p.x},${p.y}` : `L${p.x},${p.y}`)).join(' ');
+  const last = pts[pts.length - 1];
+  const first = pts[0];
+  return `${line} L${last.x},${CH} L${first.x},${CH} Z`;
+}
+
+function makeDots(ys, mask, opacity, parentEl) {
+  parentEl.innerHTML = '';
+  XS.forEach((x, i) => {
+    if (mask && mask[i]) return;
+    const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    c.setAttribute('cx', x);
+    c.setAttribute('cy', ys[i]);
+    c.setAttribute('r', '4');
+    c.setAttribute('fill', '#fff');
+    c.setAttribute('stroke', '#695dd8');
+    c.setAttribute('stroke-width', '2');
+    if (opacity !== undefined) c.setAttribute('opacity', opacity);
+    parentEl.appendChild(c);
+  });
+}
+
+function render(pastY, currY, nullMask) {
+  elPast.setAttribute('points', buildPolylinePoints(pastY, null));
+  elCurr.setAttribute('points', buildPolylinePoints(currY, nullMask));
+  elArea.setAttribute('d',      buildAreaPath(currY, nullMask));
+  // Update dot cy attributes (faster than rebuilding)
+  const pastCircles = elDotsPast.querySelectorAll('circle');
+  const currCircles = elDotsCurr.querySelectorAll('circle');
+  pastCircles.forEach((c, i) => c.setAttribute('cy', pastY[i]));
+  let ci = 0;
+  currY.forEach((y, i) => {
+    if (!nullMask[i]) { currCircles[ci].setAttribute('cy', y); ci++; }
+  });
+}
+
+// ── Animation ─────────────────────────────────────────────────────────────────
+let animFrom  = null;
+let animTo    = null;
+let animStart = null;
+let animRaf   = null;
+
+function easeInOut(t) { return t < 0.5 ? 2*t*t : -1 + (4 - 2*t)*t; }
+function lerp(a, b, t) { return a + (b - a) * t; }
+
+function startAnimation(from, to) {
+  if (animRaf) cancelAnimationFrame(animRaf);
+  animFrom  = from;
+  animTo    = to;
+  animStart = null;
+
+  function step(ts) {
+    if (!animStart) animStart = ts;
+    const elapsed = ts - animStart;
+    const t = Math.min(elapsed / DUR, 1);
+    const e = easeInOut(t);
+    const pastY = animFrom.past.map((y, i) => lerp(y, animTo.past[i], e));
+    const currY = animFrom.curr.map((y, i) => lerp(y, animTo.curr[i], e));
+    render(pastY, currY, animTo.nullMask);
+    if (t < 1) {
+      animRaf = requestAnimationFrame(step);
+    } else {
+      animFrom = animTo;
+    }
+  }
+  animRaf = requestAnimationFrame(step);
+}
+
+// ── Initialise ────────────────────────────────────────────────────────────────
+let currentTabIdx = 0;
+let currentState  = null;
+
+function initDots(nullMask) {
+  // Build static dot containers once (we'll update cy in render)
+  elDotsPast.innerHTML = '';
+  elDotsCurr.innerHTML = '';
+  XS.forEach((x, i) => {
+    const cp = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    cp.setAttribute('cx', x); cp.setAttribute('cy', CH);
+    cp.setAttribute('r', '4'); cp.setAttribute('fill', '#fff');
+    cp.setAttribute('stroke', '#695dd8'); cp.setAttribute('stroke-width', '2');
+    cp.setAttribute('opacity', '0.5');
+    elDotsPast.appendChild(cp);
+  });
+  XS.forEach((x, i) => {
+    if (nullMask[i]) return;
+    const cc = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    cc.setAttribute('cx', x); cc.setAttribute('cy', CH);
+    cc.setAttribute('r', '4'); cc.setAttribute('fill', '#fff');
+    cc.setAttribute('stroke', '#695dd8'); cc.setAttribute('stroke-width', '2');
+    elDotsCurr.appendChild(cc);
+  });
+}
+
+function applyTab(idx, animate) {
+  const tab   = TABS[idx];
+  const state = tabToYPx(tab);
+
+  // Update y-axis labels (instant, no anim)
+  ylEls.forEach((el, i) => { el.textContent = tab.yLabels[i]; });
+
+  if (!animate || !currentState) {
+    // Rebuild dots when null pattern might have changed
+    initDots(state.nullMask);
+    render(state.past, state.curr, state.nullMask);
+    currentState = state;
+  } else {
+    // If null pattern changed, rebuild dot containers first
+    const oldMask = currentState.nullMask;
+    const newMask = state.nullMask;
+    const maskChanged = oldMask.some((v, i) => v !== newMask[i]);
+    if (maskChanged) {
+      initDots(state.nullMask);
+    }
+    startAnimation(currentState, state);
+    currentState = state;
+  }
+}
+
+// Boot
+applyTab(0, false);
+
+// ── Tab click handlers ────────────────────────────────────────────────────────
+document.querySelectorAll('.tab-btn').forEach((btn, idx) => {
+  btn.addEventListener('click', () => {
+    if (idx === currentTabIdx) return;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentTabIdx = idx;
+    applyTab(idx, true);
+  });
+});
+</script>
+</body>
+</html>
