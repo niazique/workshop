@@ -4,11 +4,42 @@
 <meta charset="UTF-8">
 <title>Rate Hawk — Трансфер</title>
 <style>
+  @font-face {
+    font-family: 'PT Root UI';
+    src: url('fonts/PTRootUI-VF.ttf') format('truetype');
+    font-weight: 100 900;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'PT Root UI';
+    src: url('fonts/PTRootUI-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'PT Root UI';
+    src: url('fonts/PTRootUI-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'PT Root UI';
+    src: url('fonts/PTRootUI-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+  }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-    background: #f4f4f4; color: #1a1a1a; font-size: 14px; line-height: 1.4;
+    font-family: 'PT Root UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #f4f4f4; color: #2D3137; font-size: 14px; line-height: 1.4;
   }
+  .logo-text {
+    font-size: 22px; font-weight: 700; line-height: 1;
+    text-decoration: none; display: flex; align-items: center; gap: 0;
+    white-space: nowrap;
+  }
+  .logo-brand { color: #0E41D2; }
+  .logo-product { color: #2D3137; }
   header {
     background: #fff; border-bottom: 1px solid #e8e8e8;
     padding: 10px 32px; display: flex; align-items: center; gap: 32px;
@@ -21,20 +52,20 @@
     border-radius: 4px; text-decoration: none;
   }
   nav a:hover { background: #f4f4f4; }
-  nav a.active { color: #1a1a1a; font-weight: 600; border-bottom: 2px solid #f5b400; border-radius: 0; }
+  nav a.active { color: #2D3137; font-weight: 600; border-bottom: 2px solid #0E41D2; border-radius: 0; }
   .header-right {
     margin-left: auto; display: flex; align-items: center; gap: 16px;
     color: #555; font-size: 13px;
   }
   .header-right > span { cursor: pointer; }
-  .header-right > span:hover { color: #1a1a1a; }
+  .header-right > span:hover { color: #2D3137; }
   .user-chip {
     display: flex; align-items: center; gap: 8px;
     background: #f4f4f4; padding: 5px 12px; border-radius: 20px; cursor: pointer;
   }
   .user-chip:hover { background: #eaeaea; }
   .avatar {
-    width: 22px; height: 22px; background: #c8c8c8; border-radius: 50%;
+    width: 22px; height: 22px; background: #E3EBFD; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     font-size: 10px; color: white; font-weight: 700;
   }
@@ -43,7 +74,7 @@
     max-width: 1300px; margin: 0 auto; padding: 20px 24px;
   }
   .sidebar { display: flex; flex-direction: column; gap: 14px; }
-  .card { background: #fff; border-radius: 10px; padding: 16px; }
+  .card { background: #fff; border-radius: 16px; padding: 16px; }
   .route-label { font-size: 11px; color: #888; margin-bottom: 2px; }
   .route-place { font-weight: 700; font-size: 14px; margin-bottom: 14px; }
   .route-row {
@@ -51,7 +82,7 @@
     padding: 5px 0; font-size: 13px;
   }
   .route-dot {
-    width: 8px; height: 8px; border: 2px solid #f5b400;
+    width: 8px; height: 8px; border: 2px solid #0E41D2;
     border-radius: 50%; flex-shrink: 0; margin-top: 3px;
   }
   .route-dir { font-size: 11px; color: #888; }
@@ -62,11 +93,11 @@
   }
   .search-btn {
     margin-left: auto; width: 32px; height: 32px;
-    background: #f5b400; border: none; border-radius: 50%;
+    background: #0E41D2; border: none; border-radius: 50%;
     cursor: pointer; display: flex; align-items: center; justify-content: center;
     font-size: 13px;
   }
-  .search-btn:hover { background: #e0a300; }
+  .search-btn:hover { background: #0A35B0; }
   .faq-title { font-weight: 700; margin-bottom: 10px; }
   .faq-item {
     padding: 9px 0; border-bottom: 1px solid #f0f0f0; cursor: pointer;
@@ -78,14 +109,14 @@
     color: #bbb; font-size: 12px; flex-shrink: 0; margin-top: 1px;
     transition: transform .2s;
   }
-  .faq-item.open .chev { transform: rotate(180deg); color: #f5b400; }
+  .faq-item.open .chev { transform: rotate(180deg); color: #0E41D2; }
   .faq-answer {
     display: none; padding: 6px 0 10px; color: #555;
     font-size: 12px; line-height: 1.6; border-bottom: 1px solid #f0f0f0;
   }
   .faq-item.open + .faq-answer { display: block; }
   .tabs-wrap {
-    background: #fff; border-radius: 10px;
+    background: #fff; border-radius: 16px;
     display: flex; margin-bottom: 12px; overflow: hidden;
   }
   .tab {
@@ -95,9 +126,9 @@
     font-size: 13px; transition: all .15s;
   }
   .tab:hover { color: #555; }
-  .tab.active { color: #1a1a1a; font-weight: 600; border-bottom-color: #f5b400; }
+  .tab.active { color: #2D3137; font-weight: 600; border-bottom-color: #0E41D2; }
   .car-card {
-    background: #fff; border-radius: 10px; padding: 20px;
+    background: #fff; border-radius: 16px; padding: 20px;
     margin-bottom: 12px; display: grid;
     grid-template-columns: 190px 1fr 190px; gap: 20px;
     align-items: start; transition: background .25s, box-shadow .15s, transform .3s;
@@ -111,7 +142,7 @@
   }
   .spec {
     display: flex; align-items: center; gap: 5px;
-    font-size: 14px; font-weight: 600; color: #1a1a1a;
+    font-size: 14px; font-weight: 600; color: #2D3137;
   }
   .spec svg { flex-shrink: 0; }
   .icon-i {
@@ -121,15 +152,15 @@
     position: relative; font-family: Georgia, serif; font-weight: bold;
     flex-shrink: 0; vertical-align: middle;
   }
-  .icon-i:hover { border-color: #f5b400; color: #c78f00; }
+  .icon-i:hover { border-color: #0E41D2; color: #0A35B0; }
   .icon-i::after {
     content: attr(data-tip);
     position: absolute; bottom: calc(100% + 8px);
     left: 50%; transform: translateX(-50%);
     background: #1e1e1e; color: #fff;
-    padding: 7px 12px; border-radius: 7px;
+    padding: 7px 12px; border-radius: 12px;
     font-size: 12px; font-style: normal;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    font-family: 'PT Root UI', -apple-system, BlinkMacSystemFont, sans-serif;
     font-weight: normal; white-space: nowrap;
     z-index: 50; box-shadow: 0 4px 14px rgba(0,0,0,0.18);
     opacity: 0; pointer-events: none; transition: opacity .15s;
@@ -157,8 +188,8 @@
     letter-spacing: -0.5px; transition: color .2s;
   }
   .btn-select {
-    background: #f5b400; color: #1a1a1a; border: none;
-    padding: 11px 0; border-radius: 7px; cursor: pointer;
+    background: #0E41D2; color: #ffffff; border: none;
+    padding: 11px 0; border-radius: 12px; cursor: pointer;
     font-weight: 700; font-size: 14px; width: 100%;
     transition: background .2s, color .2s, transform .1s;
   }
@@ -166,7 +197,7 @@
   .btn-select:active { transform: scale(0.98); }
   .btn-more {
     margin-top: 8px; padding: 8px;
-    background: #f4f4f4; border-radius: 7px;
+    background: #f4f4f4; border-radius: 12px;
     font-size: 12px; color: #555; cursor: pointer;
     text-align: center; border: none; width: 100%;
     transition: background .15s;
@@ -178,8 +209,8 @@
     border-radius: 8px; padding: 9px 8px; cursor: pointer;
     transition: all .2s;
   }
-  .cap-option:hover { border-color: #f5b400; }
-  .cap-option.active { background: #fff8e0; border-color: #f5b400; }
+  .cap-option:hover { border-color: #0E41D2; }
+  .cap-option.active { background: #E3EBFD; border-color: #0E41D2; }
   .cap-row {
     display: flex; align-items: center; gap: 8px;
     font-size: 13px; font-weight: 600; margin-bottom: 3px;
@@ -188,7 +219,7 @@
   .cap-extra {
     font-size: 11px; color: #888; padding-left: 2px; height: 14px;
   }
-  .cap-option.active .cap-extra { color: #b07d00; font-weight: 600; }
+  .cap-option.active .cap-extra { color: #0A35B0; font-weight: 600; }
   #cardsContainer { transition: opacity .18s; }
   #cardsContainer.sorting { opacity: 0; }
 </style>
@@ -196,9 +227,7 @@
 <body>
 
 <header>
-  <div class="logo-wrap"><svg width="160" height="40" viewBox="0 0 160 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M31.9971 6.74316L43.5439 13.4092C44.3687 13.8845 44.876 14.7637 44.876 15.7158C44.876 15.7549 44.8761 24.0301 44.8643 27.5322C44.8607 28.4793 44.353 29.3529 43.5332 29.8281C41.6253 30.9314 36.0193 34.1584 33.4355 35.6455C32.6123 36.1191 31.5967 36.1179 30.7734 35.6426L15.4961 26.7871L18.8438 26.1279C19.738 25.9529 19.8196 24.7055 18.9561 24.415C14.7887 23.0163 8 20.7383 8 20.7383C8 20.7383 31.6362 24.0881 33.6885 24.3682C33.8919 24.3953 34.0854 24.4525 34.2617 24.5576L37.3389 26.2773C37.6953 26.4929 37.8212 26.7272 37.7432 27.3213L37.5469 28.8682L38.8076 28.1143C39.8278 27.4998 40.8855 26.4743 40.3135 23.7432L39.7617 20.8369C39.6836 20.4346 39.4695 20.0732 39.1572 19.8135C37.3901 18.3468 31.9971 14.2441 31.9971 14.2441L17.7773 3.13867L24.9541 6.50488C25.7825 6.89361 26.5853 5.93002 26.0557 5.18652L23.7852 2L31.9971 6.74316ZM111.637 26.2656L111.97 28.3721L112.041 28.8232H108.951L108.939 28.7393L108.61 26.2656H105.994L105.787 27.8184L105.668 28.71L105.653 28.8232H102.563L104.801 14.6123H109.804L111.637 26.2656ZM55.9336 14.6104C56.7433 14.6104 57.4616 14.7546 58.0947 15.0381C58.7262 15.3216 59.2222 15.7361 59.582 16.2793C59.9418 16.8241 60.1211 17.4998 60.1211 18.3076V18.8564C60.121 19.7389 59.9023 20.4636 59.4678 21.0254C59.0332 21.5872 58.4541 21.9951 57.7344 22.248L60.4814 28.8223H56.9385L54.3809 21.8301V28.8223H51.1963V14.6104H55.9336ZM69.8408 26.2637L70.2432 28.8223H67.1543L66.8125 26.2637H64.1973L63.8555 28.8223H60.7666L61.1689 26.2637L63.002 14.6104H68.0039L69.8408 26.2637ZM77.8008 17.3584H75.4883V28.8223H72.2666V17.3584H69.957V14.6104H77.8008V17.3584ZM86.0234 17.3584H82.1211V20.2002H86.0234V22.9482H82.1211V26.0752H86.0234V28.8223H78.9375V14.6104H86.0234V17.3584ZM95.1201 20.1445H97.9619V14.6104H101.182V28.8223H97.9619V22.9111H93.8115C94.5344 22.9113 95.1199 23.4968 95.1201 24.2197V28.8203H91.9004V14.6104H95.1201V20.1445ZM116.093 26.3027L117.286 14.6104H121.152L122.422 26.2842L123.33 14.6104H126.269L124.734 28.8223H120.433L119.258 17.1318L118.14 28.8223H113.78L112.246 14.6104H115.183L116.093 26.3027ZM130.833 21.377L133.183 14.6104H136.537L133.731 21.2812L136.669 28.8223H133.146L130.833 22.0391V28.8223H127.65V14.6104H130.833V21.377ZM64.5566 23.6123H66.4512L65.5039 16.6973L64.5566 23.6123ZM106.354 23.6123H108.248L107.301 16.6973L106.354 23.6123ZM38.125 21.9248C38.1063 22.2813 37.8943 22.6177 37.543 22.7705C37.0456 22.9861 36.4715 22.7554 36.2559 22.2598C36.171 22.0612 36.1607 21.8485 36.21 21.6533C35.6495 21.1846 34.146 19.929 34.0068 19.7949C33.8761 19.6707 33.9131 19.4381 33.915 19.4268L38.125 21.9248ZM53.0732 17.2637C53.7963 17.2637 54.3817 17.8493 54.3818 18.5723V20.9033H55.499C55.9404 20.9033 56.2918 20.7637 56.5498 20.4854C56.8077 20.207 56.9384 19.754 56.9385 19.1211V18.8545C56.9385 18.2604 56.8078 17.8475 56.5498 17.6133C56.2918 17.3808 55.9403 17.2637 55.499 17.2637H53.0732Z" fill="black"/>
-</svg></div>
+  <a class="logo-text" href="#"><span class="logo-brand">Rate</span><span class="logo-product">Hawk</span></a>
   <nav>
     <a href="#" class="active">Поиск</a>
     <a href="#">Заказы</a>
@@ -346,7 +375,7 @@
         <div>
           <div class="car-name">Микроавтобус</div>
           <div class="capacity-selector" id="capSelector">
-            <div class="cap-option active" data-price="3878" data-seats="5" data-bg="#fff8e0">
+            <div class="cap-option active" data-price="3878" data-seats="5" data-bg="#E3EBFD">
               <div class="cap-row">
                 <span class="cap-spec"><svg width="18" height="13" viewBox="0 39 20 15" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.32463 43.1593C9.32463 44.9042 7.92273 46.3187 6.19338 46.3187C4.46404 46.3187 3.06213 44.9042 3.06213 43.1593C3.06213 41.4143 4.46404 39.9998 6.19338 39.9998C7.92273 39.9998 9.32463 41.4143 9.32463 43.1593ZM9.51213 47.8133C9.39963 47.87 9.28713 47.9268 9.19338 48.0025C7.67463 49.043 7.33713 51.5025 7.24338 52.8457H1.59963C1.43088 52.8457 1.28088 52.77 1.16838 52.6565C1.05588 52.5241 0.999634 52.3727 0.999634 52.2025C1.01838 51.6538 1.14963 48.9295 2.40588 48.0592C3.39963 47.3782 5.53713 47.3214 6.17463 47.3214C6.73713 47.3214 8.42463 47.3592 9.51213 47.8133ZM18.8309 53.0727C18.8121 52.3916 18.6434 49.8376 17.4246 49.0241C16.4309 48.343 14.2934 48.2862 13.6559 48.2862C13.0184 48.2862 10.8809 48.343 9.88714 49.0241C8.63089 49.8943 8.49964 52.6187 8.48089 53.1673C8.48089 53.3376 8.53714 53.4889 8.64964 53.6214C8.76214 53.7349 8.93089 53.8106 9.08089 53.8106H18.2121C18.5496 53.8106 18.8309 53.5268 18.8309 53.1862V53.0727ZM16.7871 44.143C16.7871 45.8879 15.3852 47.3025 13.6559 47.3025C11.9265 47.3025 10.5246 45.8879 10.5246 44.143C10.5246 42.3981 11.9265 40.9836 13.6559 40.9836C15.3852 40.9836 16.7871 42.3981 16.7871 44.143Z" fill="#2D3137"/></svg> 5</span>
                 <span class="cap-spec"><svg width="12" height="17" viewBox="49 37 14 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M58.0394 41.9398V39.8704H53.9134V41.9398H58.0394ZM61.5071 41.9398C62.0887 41.9399 62.5599 42.411 62.5599 42.9925V54.0638C62.5597 54.6452 62.0885 55.1164 61.5071 55.1165L61.5101 55.7454C61.5101 55.9781 61.3208 56.1663 61.0882 56.1663H59.8939C59.6612 56.1663 59.473 55.9781 59.473 55.7454V55.1165H52.5286V55.7454C52.5286 55.9781 52.3394 56.1663 52.1068 56.1663H50.9124C50.6798 56.1663 50.4915 55.9781 50.4915 55.7454L50.4935 55.1165C49.9121 55.1163 49.4409 54.6451 49.4407 54.0638V42.9925C49.4407 42.411 49.912 41.94 50.4935 41.9398H52.6917V39.8704H52.3489C52.1164 39.8704 51.9283 39.682 51.928 39.4495V38.2542C51.9282 38.0217 52.1164 37.8333 52.3489 37.8333H59.6546C59.8871 37.8333 60.0753 38.0217 60.0755 38.2542V39.4495C60.0753 39.682 59.8871 39.8704 59.6546 39.8704H59.261V41.9398H61.5071Z" fill="#2D3137"/></svg> 5</span>
@@ -409,7 +438,7 @@
   const busBtn = document.getElementById('busBtn');
 
   const btnColors = {
-    '5': { bg: '#f5b400', color: '#1a1a1a' },
+    '5': { bg: '#0E41D2', color: '#2D3137' },
     '6': { bg: '#2196f3', color: '#fff' },
     '7': { bg: '#43a047', color: '#fff' }
   };
