@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<!-- saved from url=(0057)file:///Users/p.serbina/Downloads/entry-requirements.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entry Requirements — RateHawk</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com/">
+  <link href="./Entry Requirements — RateHawk_files/css2" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f4f4f4;
+      --white: #ffffff;
+      --text: #2d3137;
+      --muted: #868686;
+      --border: #e5e5e5;
+      --accent: #fddd55;
+      --blue: #4086e4;
+      --sidebar-bg: #dbe7fb;
+      --font: 'PT Sans', sans-serif;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--white);
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px 0 16px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .logo {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.5px;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .logo-icon {
+      width: 28px;
+      height: 28px;
+      background: var(--accent);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    nav {
+      display: flex;
+      height: 48px;
+    }
+
+    nav a {
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    nav a.active {
+      color: var(--text);
+      background: var(--bg);
+    }
+
+    nav a:hover { color: var(--text); }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-size: 15px;
+    }
+
+    .header-right .ctrl {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .header-right .ctrl .flag { font-size: 18px; }
+    .header-right .ctrl .chevron { font-size: 10px; color: var(--muted); }
+
+    .profile-block {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .profile-block .email {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .profile-block .name {
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .badge {
+      background: var(--blue);
+      color: #fff;
+      font-size: 10px;
+      border-radius: 12px;
+      padding: 1px 5px;
+      font-weight: 700;
+    }
+
+    .burger { font-size: 20px; color: var(--text); cursor: pointer; padding: 0 4px; }
+
+    /* ── MAIN ── */
+    main {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 88px 40px 60px;
+    }
+
+    h1 {
+      font-size: 40px;
+      font-weight: 700;
+      line-height: 44px;
+      color: var(--text);
+      margin-bottom: 32px;
+    }
+
+    /* ── LAYOUT ── */
+    .layout {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+    }
+
+    .main-col {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* ── FILTERS ── */
+    .filters {
+      display: flex;
+      gap: 7px;
+      align-items: center;
+    }
+
+    .dropdown {
+      flex: 1;
+      position: relative;
+      border-radius: 12px;
+    }
+
+    .dropdown select {
+      width: 100%;
+      appearance: none;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px 36px 6px 12px;
+      font-family: var(--font);
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text);
+      cursor: pointer;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .dropdown select:hover { border-color: #c0c0c0; }
+    .dropdown select:focus { border-color: var(--blue); }
+
+    .dropdown label {
+      position: absolute;
+      top: 4px;
+      left: 12px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .dropdown::after {
+      content: '▾';
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 12px;
+      color: var(--muted);
+      pointer-events: none;
+    }
+
+    .btn-check {
+      background: var(--accent);
+      border: none;
+      border-radius: 12px;
+      height: 48px;
+      padding: 0 24px;
+      font-family: var(--font);
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity 0.15s;
+      flex-shrink: 0;
+      width: 148px;
+    }
+
+    .btn-check:hover { opacity: 0.85; }
+
+    /* ── RESULTS CARD ── */
+    .results-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .req-section {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .req-section h2 {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 24px;
+      color: var(--text);
+    }
+
+    .req-section p,
+    .req-section ul {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 22px;
+      color: var(--text);
+    }
+
+    .req-section ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .req-section ul li::before { content: '– '; }
+
+    .req-section a {
+      color: var(--blue);
+      text-decoration: underline;
+      font-size: 16px;
+      line-height: 22px;
+    }
+
+    .updated {
+      font-size: 14px;
+      color: var(--text);
+      line-height: 20px;
+      padding-top: 36px;
+      border-top: 1px solid var(--border);
+      margin-top: 12px;
+    }
+
+    .updated strong { font-weight: 700; }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: 275px;
+      flex-shrink: 0;
+      background: var(--sidebar-bg);
+      border-radius: 12px;
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+    }
+
+    .sidebar-text {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .sidebar-text h3 {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 24px;
+      color: var(--text);
+    }
+
+    .sidebar-text p {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      color: var(--text);
+    }
+
+    .btn-report {
+      background: var(--white);
+      border: none;
+      border-radius: 12px;
+      height: 40px;
+      width: 100%;
+      font-family: var(--font);
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text);
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+
+    .btn-report:hover { opacity: 0.8; }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--white);
+      border-radius: 16px;
+      width: 444px;
+      padding: 20px 24px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.18);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .modal-header h4 {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 28px;
+      color: var(--text);
+      flex: 1;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: var(--muted);
+      padding: 0;
+      line-height: 1;
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+
+    .modal-close:hover { color: var(--text); }
+
+    .modal-body {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .modal-body textarea,
+    .modal-body input {
+      width: 100%;
+      font-family: var(--font);
+      font-size: 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      resize: none;
+      outline: none;
+      color: var(--text);
+      transition: border-color 0.15s;
+    }
+
+    .modal-body textarea { height: 116px; }
+    .modal-body input { height: 48px; }
+    .modal-body textarea:focus,
+    .modal-body input:focus { border-color: var(--blue); }
+
+    .modal-body textarea::placeholder,
+    .modal-body input::placeholder { color: var(--muted); }
+
+    .modal-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .modal-actions button {
+      flex: 1;
+      height: 48px;
+      border: none;
+      border-radius: 12px;
+      font-family: var(--font);
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+
+    .modal-actions button:hover { opacity: 0.85; }
+    .btn-cancel { background: var(--bg); color: var(--text); }
+    .btn-send { background: var(--accent); color: var(--text); }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-left">
+    <div class="logo">
+      <div class="logo-icon">🦅</div>
+      RateHawk
+    </div>
+    <nav>
+      <a href="file:///Users/p.serbina/Downloads/entry-requirements.html#" class="active">Search</a>
+      <a href="file:///Users/p.serbina/Downloads/entry-requirements.html#">Selections</a>
+      <a href="file:///Users/p.serbina/Downloads/entry-requirements.html#">Orders</a>
+      <a href="file:///Users/p.serbina/Downloads/entry-requirements.html#">Reporting</a>
+    </nav>
+  </div>
+  <div class="header-right">
+    <div class="ctrl">
+      <span class="flag">🇬🇧</span>
+      <span>English</span>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="ctrl">
+      <span>💱</span>
+      <span>USD, $</span>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="ctrl">
+      <span>❓</span>
+      <span>Support</span>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="ctrl">
+      <span>👤</span>
+      <div class="profile-block">
+        <span class="email">alex@emergingtra… <span class="badge">0</span></span>
+        <span class="name">Ratehawk</span>
+      </div>
+      <span class="chevron">▾</span>
+    </div>
+    <div class="burger">☰</div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main>
+  <h1>Entry requirements</h1>
+
+  <div class="layout">
+    <!-- LEFT COLUMN -->
+    <div class="main-col">
+
+      <!-- FILTERS -->
+      <div class="filters">
+        <div class="dropdown">
+          <label>Departure country</label>
+          <select>
+            <option selected="">Kazakhstan</option>
+            <option>Russia</option>
+            <option>Germany</option>
+            <option>USA</option>
+          </select>
+        </div>
+        <div class="dropdown">
+          <label>Destination country</label>
+          <select>
+            <option selected="">Austria</option>
+            <option>France</option>
+            <option>Italy</option>
+            <option>Spain</option>
+          </select>
+        </div>
+        <div class="dropdown">
+          <label>Citizenship</label>
+          <select>
+            <option selected="">Kazakh</option>
+            <option>Russian</option>
+            <option>German</option>
+            <option>American</option>
+          </select>
+        </div>
+        <button class="btn-check">Check</button>
+      </div>
+
+      <!-- RESULTS -->
+      <div class="results-card">
+        <div class="req-section">
+          <h2>Visa</h2>
+          <p>Visa Required (Schengen)</p>
+        </div>
+
+        <div class="req-section">
+          <h2>Passport</h2>
+          <p>Valid for at least 6 months after the departure date. Must have at least 2 empty pages.</p>
+        </div>
+
+        <div class="req-section">
+          <h2>Documents</h2>
+          <ul>
+            <li>Bank statement for the last 3 months</li>
+            <li>Proof of employment</li>
+            <li>Hotel voucher (RateHawk voucher is sufficient)</li>
+          </ul>
+        </div>
+
+        <div class="req-section">
+          <h2>Insurances</h2>
+          <p>Mandatory travel insurance with minimum coverage of €30,000.</p>
+        </div>
+
+        <div class="req-section">
+          <h2>How to apply</h2>
+          <p>Apply at least 15 days before departure</p>
+          <a href="https://vfsglobal.com/" target="_blank">Go to the website</a>
+        </div>
+
+        <div class="updated">
+          Updated on <strong>21.01.2026</strong>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-text">
+        <h3>RateHawk's entry requirements database</h3>
+        <p>Explore our comprehensive database of visa requirements for the world's most popular destinations, based on your client's citizenship.</p>
+        <p>We do our best to keep this information accurate and up to date. However, in rare cases, you may need to double-check the entry requirements with official sources.</p>
+        <p>If you notice any incorrect information, please let us know and we'll update it as soon as possible</p>
+      </div>
+      <button class="btn-report" onclick="openModal()">Report error</button>
+    </div>
+  </div>
+</main>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h4>Report incorrect information</h4>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <textarea placeholder="Describe the issue..."></textarea>
+      <input type="email" placeholder="Your email">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-send">Send</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function openModal() {
+    document.getElementById('modal').classList.add('open');
+  }
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open');
+  }
+  document.getElementById('modal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+</script>
+
+
+
+</body></html>
