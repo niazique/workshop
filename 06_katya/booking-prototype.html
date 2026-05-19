@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Бронирование — Отель Palmira Art</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --main: #0E41D2;
+    --main-secondary: #E3EBFD;
+    --main-highlight: #F3F7FE;
+    --text-dark: #2D3137;
+    --text-mid: #868686;
+    --text-placeholder: #C8C8C8;
+    --border: #E5E5E5;
+    --bg-light: #F8F8F8;
+    --alert-bg: #FAE9E9;
+    --alert-border: #CE2121;
+    --success: #53AF24;
+    --success-bg: rgba(221,239,211,0.7);
+    --white: #FFFFFF;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    font-family: 'PT Sans', sans-serif;
+    color: var(--text-dark);
+    background: #F4F5F7;
+  }
+
+  body { min-height: 100vh; }
+
+  /* HEADER */
+  .header {
+    background: var(--white);
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-logo {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--main);
+    letter-spacing: -0.5px;
+    text-decoration: none;
+  }
+  .header-logo span { color: var(--text-dark); }
+  .header-nav { display: flex; gap: 16px; align-items: center; }
+  .header-nav a {
+    font-size: 14px;
+    color: var(--main);
+    text-decoration: none;
+    padding: 7px 12px;
+    border-radius: var(--radius-md);
+    transition: background .15s;
+  }
+  .header-nav a:hover { background: var(--main-secondary); }
+  .header-icons { display: flex; gap: 12px; align-items: center; }
+  .header-icon {
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: background .15s;
+    color: var(--text-dark);
+  }
+  .header-icon:hover { background: var(--bg-light); }
+  .header-icon svg { width: 20px; height: 20px; }
+  .header-divider { width: 1px; height: 30px; background: var(--border); }
+  .header-login {
+    display: flex; align-items: center; gap: 6px;
+    padding: 4px 8px 4px 4px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: background .15s;
+    text-decoration: none;
+  }
+  .header-login:hover { background: var(--main-secondary); }
+  .header-login-avatar {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--main-secondary);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--main);
+  }
+  .header-login span { font-size: 16px; color: var(--main); font-weight: 500; }
+
+  /* LAYOUT */
+  .page {
+    max-width: 1186px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+  }
+
+  /* LEFT COLUMN */
+  .col-main { flex: 0 0 600px; display: flex; flex-direction: column; gap: 24px; }
+  .col-side { flex: 0 0 320px; display: flex; flex-direction: column; gap: 12px; padding-top: 102px; }
+
+  /* BACK BUTTON */
+  .btn-back {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--white); border: none; cursor: pointer;
+    padding: 8px 12px 8px 8px;
+    border-radius: var(--radius-md);
+    font-size: 16px; color: var(--text-dark);
+    transition: background .15s;
+    font-family: inherit;
+  }
+  .btn-back:hover { background: var(--border); }
+  .btn-back svg { width: 18px; height: 18px; }
+
+  /* SECTION TITLE */
+  .section-title { font-size: 24px; font-weight: 700; line-height: 30px; }
+
+  /* CARDS */
+  .card {
+    background: var(--white);
+    border-radius: var(--radius-xl);
+    padding: 20px;
+    overflow: hidden;
+  }
+  .card-sm {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 4px;
+  }
+
+  /* ALERT */
+  .alert-warning {
+    background: var(--alert-bg);
+    border: 1px solid var(--alert-border);
+    border-radius: var(--radius-lg);
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 18px;
+  }
+  .alert-warning svg { width: 20px; height: 20px; flex-shrink: 0; color: var(--alert-border); }
+
+  /* AUTH SECTION */
+  .auth-headline {
+    font-size: 18px; font-weight: 700; line-height: 22px;
+    margin-bottom: 4px;
+  }
+  .auth-headline .gradient {
+    background: linear-gradient(164deg, #0460EA 16%, #4225F2 92%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .auth-subline {
+    display: flex; align-items: center; gap: 4px;
+    font-size: 18px; font-weight: 700; line-height: 22px;
+  }
+  .guru-badge {
+    display: inline-flex; align-items: center; gap: 3px;
+    background: linear-gradient(127deg, #C7FB94 16%, #A3F396 94%);
+    border-radius: 8px;
+    padding: 2px 4px;
+    font-size: 12px; font-weight: 700;
+    color: #2d3137;
+  }
+  .auth-inputs { display: flex; gap: 8px; margin-top: 16px; }
+  .auth-actions {
+    display: flex; align-items: center; gap: 12px;
+    margin-top: 16px;
+  }
+
+  /* FORM FIELDS */
+  .field-group { display: flex; flex-direction: column; position: relative; border-radius: var(--radius-md); flex: 1; }
+  .field-label {
+    position: absolute;
+    top: 2px; left: 12px;
+    font-size: 12px; font-weight: 500; line-height: 20px;
+    color: var(--text-dark);
+    z-index: 1;
+    display: flex; align-items: center; gap: 2px;
+  }
+  .field-label .required { color: #ce2121; font-size: 10px; }
+  .field-input {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 22px 12px 6px;
+    font-size: 16px; font-weight: 500; color: var(--text-placeholder);
+    font-family: inherit;
+    background: var(--white);
+    outline: none;
+    transition: border-color .15s;
+    width: 100%;
+  }
+  .field-input:focus { border-color: var(--main); color: var(--text-dark); }
+  .field-input.filled { color: var(--text-dark); }
+
+  /* PASSWORD FIELD */
+  .field-input-password { padding-right: 40px; }
+  .field-eye {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    color: var(--text-mid); cursor: pointer;
+    margin-top: 8px;
+  }
+  .field-eye svg { width: 20px; height: 20px; }
+
+  /* SELECT / DROPDOWN */
+  .field-select {
+    appearance: none;
+    -webkit-appearance: none;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 22px 36px 6px 12px;
+    font-size: 16px; font-weight: 500; color: var(--text-dark);
+    font-family: inherit;
+    background: var(--white);
+    outline: none;
+    cursor: pointer;
+    width: 100%;
+    transition: border-color .15s;
+  }
+  .field-select:focus { border-color: var(--main); }
+  .field-select-arrow {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    pointer-events: none; color: var(--text-mid); margin-top: 8px;
+  }
+  .field-select-arrow svg { width: 16px; height: 16px; }
+
+  /* PHONE */
+  .phone-row { display: flex; flex: 1; min-width: 0; }
+  .phone-code {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-right: none;
+    border-radius: var(--radius-md) 0 0 var(--radius-md);
+    padding: 4px 8px 6px 12px;
+    display: flex; flex-direction: column; gap: 2px;
+    cursor: pointer; flex-shrink: 0;
+  }
+  .phone-code-label { font-size: 12px; color: var(--text-dark); font-weight: 500; }
+  .phone-code-val {
+    display: flex; align-items: center; gap: 4px;
+    font-size: 16px; font-weight: 500; color: var(--text-dark);
+  }
+  .phone-code-val svg { width: 16px; height: 16px; color: var(--text-mid); }
+  .flag { font-size: 16px; }
+  .phone-number {
+    flex: 1; border: 1px solid var(--border);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    position: relative;
+  }
+  .phone-number .field-label { top: 2px; }
+  .phone-number input {
+    border: none; border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    padding: 22px 12px 6px;
+    font-size: 16px; color: var(--text-placeholder);
+    font-family: inherit; font-weight: 500;
+    outline: none; width: 100%; background: transparent;
+  }
+  .phone-number input:focus { color: var(--text-dark); }
+
+  /* BUTTONS */
+  .btn-primary {
+    background: var(--main);
+    color: #fff; border: none; border-radius: var(--radius-md);
+    padding: 10px 16px; font-size: 16px; font-weight: 500;
+    cursor: pointer; font-family: inherit;
+    transition: background .15s, transform .1s;
+    white-space: nowrap;
+  }
+  .btn-primary:hover { background: #0c38b8; }
+  .btn-primary:active { transform: scale(.97); }
+  .btn-primary-lg {
+    width: 100%; height: 60px;
+    border-radius: var(--radius-md);
+    font-size: 20px; padding: 18px 24px;
+  }
+  .btn-secondary {
+    background: var(--main-secondary);
+    color: var(--main); border: none; border-radius: var(--radius-md);
+    padding: 10px 16px; font-size: 16px; font-weight: 500;
+    cursor: pointer; font-family: inherit;
+    transition: background .15s;
+    white-space: nowrap;
+  }
+  .btn-secondary:hover { background: #ccdafb; }
+  .btn-icon {
+    width: 40px; height: 40px;
+    background: var(--main); color: #fff; border: none;
+    border-radius: var(--radius-sm); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: background .15s;
+  }
+  .btn-icon:hover { background: #0c38b8; }
+  .btn-icon svg { width: 18px; height: 18px; }
+
+  /* SOCIAL BUTTONS */
+  .social-btn {
+    width: 40px; height: 40px; border-radius: 50%; border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; font-size: 18px;
+    transition: transform .15s, opacity .15s;
+    text-decoration: none;
+  }
+  .social-btn:hover { transform: scale(1.08); opacity: .9; }
+  .social-vk { background: #0077FF; }
+  .social-ok { background: #EE8208; }
+
+  /* CARD TITLE */
+  .card-title { font-size: 18px; font-weight: 700; line-height: 22px; }
+
+  /* GUESTS */
+  .input-rows { display: flex; flex-direction: column; gap: 12px; }
+  .input-row { display: flex; gap: 8px; }
+
+  /* FOOD SELECTOR */
+  .selector {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .selector-option {
+    display: flex; gap: 8px; padding: 16px;
+    cursor: pointer; transition: background .15s;
+  }
+  .selector-option:hover { background: var(--main-highlight); }
+  .selector-option + .selector-option { border-top: 1px solid var(--border); }
+  .radio {
+    width: 16px; height: 16px; border-radius: 50%;
+    border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 4px;
+    transition: border-color .15s;
+  }
+  .radio.checked { border-color: var(--main); }
+  .radio.checked::after {
+    content: '';
+    width: 8px; height: 8px;
+    border-radius: 50%; background: var(--main);
+  }
+  .option-content { flex: 1; }
+  .option-header {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-size: 16px; font-weight: 700; line-height: 22px; color: var(--text-dark);
+    margin-bottom: 2px;
+  }
+  .option-sub {
+    display: flex; justify-content: space-between; font-size: 14px;
+    color: var(--text-mid); line-height: 20px;
+  }
+  .option-tag {
+    display: inline-flex; font-size: 14px; font-weight: 700;
+    color: var(--success); margin-top: 4px;
+  }
+
+  /* CHECK-IN */
+  .check-in-header { margin-bottom: 20px; }
+  .check-in-header h3 { font-size: 18px; font-weight: 700; line-height: 22px; }
+  .check-in-header p { font-size: 14px; color: var(--text-mid); margin-top: 2px; }
+  .textarea-wrap { position: relative; border-radius: var(--radius-md); }
+  .textarea-label {
+    position: absolute; top: 2px; left: 12px;
+    font-size: 12px; font-weight: 500; color: var(--text-dark);
+    z-index: 1;
+  }
+  .field-textarea {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 24px 12px 6px;
+    font-size: 14px; font-weight: 500; color: var(--text-placeholder);
+    font-family: inherit; width: 100%; height: 120px; resize: none; outline: none;
+    line-height: 18px; transition: border-color .15s;
+  }
+  .field-textarea:focus { border-color: var(--main); color: var(--text-dark); }
+
+  /* SIDE — HOTEL INFO */
+  .hotel-info { padding: 16px; gap: 16px; }
+  .stars { display: flex; gap: 1px; }
+  .star { color: #FFA500; font-size: 12px; }
+  .hotel-name { font-size: 18px; font-weight: 700; line-height: 22px; margin-top: 4px; }
+  .hotel-address { font-size: 14px; color: var(--text-mid); margin-top: 2px; }
+  .dates-row { display: flex; gap: 4px; margin-top: 8px; }
+  .date-box {
+    flex: 1; background: var(--bg-light);
+    border-radius: var(--radius-md); padding: 8px 12px;
+  }
+  .date-box-label { font-size: 14px; color: var(--text-mid); line-height: 20px; }
+  .date-box-val { font-size: 16px; font-weight: 500; line-height: 22px; }
+  .room-name { font-size: 16px; font-weight: 700; line-height: 22px; margin-top: 8px; }
+  .room-info { font-size: 14px; color: var(--text-mid); line-height: 20px; }
+  .tag-deferred {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: var(--success-bg);
+    border-radius: 6px;
+    padding: 2px 4px 2px 8px;
+    font-size: 14px; font-weight: 500; color: var(--success);
+    margin-top: 8px;
+  }
+
+  /* PROMO */
+  .promo-card { overflow: visible; }
+  .promo-inner { padding: 10px 12px 0; }
+  .promo-row { display: flex; align-items: center; gap: 0; padding: 12px 4px; position: relative; }
+  .promo-input-wrap { flex: 1; position: relative; }
+
+  /* PRICE */
+  .price-section { padding: 10px 12px; }
+  .price-title { font-size: 18px; font-weight: 700; }
+  .price-rows { padding: 0 12px 0; display: flex; flex-direction: column; gap: 0; }
+  .price-row {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    padding: 4px 0; font-size: 14px; font-weight: 500; line-height: 20px;
+  }
+  .price-discount { color: var(--success); }
+  .final-price-box {
+    background: var(--main-highlight);
+    border-radius: 14px;
+    padding: 12px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 18px; font-weight: 700; margin: 4px;
+  }
+
+  /* NOT INCLUDED */
+  .not-included-title {
+    display: flex; align-items: center; gap: 4px;
+    font-size: 18px; font-weight: 700;
+  }
+  .hint-icon {
+    width: 22px; height: 22px; border-radius: 50%;
+    border: 1.5px solid var(--text-mid);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; color: var(--text-mid); cursor: help;
+    flex-shrink: 0;
+  }
+
+  /* PAY BUTTON SECTION */
+  .pay-section { display: flex; flex-direction: column; gap: 16px; }
+  .info-link { font-size: 12px; color: var(--main); text-decoration: none; }
+  .info-link:hover { text-decoration: underline; }
+
+  /* FOOTER */
+  .footer {
+    background: var(--white);
+    padding: 24px 20px 0;
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+  .footer-top {
+    max-width: 1186px; margin: 0 auto;
+    display: flex; gap: 40px; padding-bottom: 24px;
+  }
+  .footer-logo { font-size: 20px; font-weight: 700; color: var(--main); flex-shrink: 0; }
+  .footer-links { flex: 1; display: flex; gap: 0; }
+  .footer-col { flex: 1; display: flex; flex-direction: column; gap: 0; }
+  .footer-col-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; }
+  .footer-col a {
+    font-size: 14px; color: var(--text-dark); text-decoration: none;
+    padding: 4px 0; line-height: 20px;
+    transition: color .15s;
+  }
+  .footer-col a:hover { color: var(--main); }
+  .footer-bottom {
+    border-top: 1px solid var(--border);
+    max-width: 1186px; margin: 0 auto;
+    padding: 20px 0;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-copyright { font-size: 14px; color: var(--text-mid); }
+  .payment-icons { display: flex; gap: 12px; align-items: center; }
+  .payment-icon {
+    background: var(--bg-light); border-radius: 4px;
+    padding: 4px 8px; font-size: 12px; font-weight: 700;
+    color: var(--text-mid);
+  }
+  .payment-visa { color: #1A1F71; font-style: italic; font-size: 14px; }
+  .payment-mc { color: #EB001B; }
+  .security-text {
+    font-size: 14px; color: var(--text-mid); max-width: 373px;
+  }
+  .security-text strong { color: var(--text-dark); display: block; font-size: 16px; }
+
+  /* SECTION SPACING */
+  .section-gap { display: flex; flex-direction: column; gap: 12px; }
+
+  /* FADE IN */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .card, .card-sm, .alert-warning {
+    animation: fadeUp .35s ease both;
+  }
+  .col-main > *:nth-child(1) { animation-delay: .05s; }
+  .col-main > *:nth-child(2) { animation-delay: .1s; }
+  .col-main > *:nth-child(3) .card:nth-child(1) { animation-delay: .15s; }
+  .col-main > *:nth-child(3) .card:nth-child(2) { animation-delay: .2s; }
+  .col-main > *:nth-child(3) .card:nth-child(3) { animation-delay: .25s; }
+  .col-side > * { animation: fadeUp .35s ease both; }
+  .col-side > *:nth-child(1) { animation-delay: .3s; }
+  .col-side > *:nth-child(2) { animation-delay: .35s; }
+  .col-side > *:nth-child(3) { animation-delay: .4s; }
+  .col-side > *:nth-child(4) { animation-delay: .45s; }
+
+  /* FOOD OPTION TOGGLE */
+  .selector-option[data-selected="true"] { background: #f8fbff; }
+
+  @media (max-width: 1050px) {
+    .page { flex-direction: column; }
+    .col-main { flex: none; width: 100%; }
+    .col-side { flex: none; width: 100%; padding-top: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <a class="header-logo" href="#">ostro<span>vok</span></a>
+  <nav class="header-nav">
+    <a href="#">Разместить свой объект</a>
+  </nav>
+  <div class="header-icons">
+    <!-- Favorites -->
+    <div class="header-icon" title="Избранное">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/></svg>
+    </div>
+    <!-- Notifications -->
+    <div class="header-icon" title="Уведомления">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 2a6 6 0 00-6 6v3.5L2.5 13h15L16 11.5V8a6 6 0 00-6-6z"/><path d="M8 17a2 2 0 004 0"/></svg>
+    </div>
+    <!-- Help -->
+    <div class="header-icon" title="Помощь">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="8"/><path d="M10 14v-1M10 7a2 2 0 010 4"/></svg>
+    </div>
+    <!-- Language -->
+    <div class="header-icon" title="Язык">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="8"/><path d="M2 10h16M10 2c-2.2 2.7-3.5 5.3-3.5 8s1.3 5.3 3.5 8M10 2c2.2 2.7 3.5 5.3 3.5 8s-1.3 5.3-3.5 8"/></svg>
+    </div>
+    <div class="header-divider"></div>
+    <a class="header-login" href="#">
+      <div class="header-login-avatar">
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="7" r="4"/><path d="M2 18c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+      </div>
+      <span>Войти</span>
+    </a>
+  </div>
+</header>
+
+<!-- PAGE CONTENT -->
+<div class="page">
+
+  <!-- LEFT COLUMN -->
+  <div class="col-main">
+
+    <!-- Back button -->
+    <div>
+      <button class="btn-back">
+        <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M11 4L6 9l5 5"/></svg>
+        Назад к Отель Palmira Art
+      </button>
+    </div>
+
+    <!-- Main content -->
+    <div class="section-gap">
+      <h1 class="section-title">Ваше бронирование</h1>
+
+      <!-- Alert -->
+      <div class="alert-warning">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><path d="M10 6v4M10 14h.01"/></svg>
+        Один из последних номеров на нашем сайте! Забронируйте, пока он доступен
+      </div>
+
+      <!-- Auth -->
+      <div class="card">
+        <div class="auth-headline">
+          Авторизуйтесь и получите скидку до <span class="gradient">40%</span> и бонусы
+        </div>
+        <div class="auth-subline">
+          по программе лояльности&nbsp;
+          <span class="guru-badge">🌟 GURU</span>
+        </div>
+        <div class="auth-inputs">
+          <div class="field-group">
+            <label class="field-label">Электронная почта</label>
+            <input class="field-input" type="email" placeholder="example@mail.ru" />
+          </div>
+          <div class="field-group" style="position:relative;">
+            <label class="field-label">Пароль</label>
+            <input class="field-input field-input-password" type="password" placeholder="••••••••" />
+            <span class="field-eye">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 10s3-7 8-7 8 7 8 7-3 7-8 7-8-7-8-7z"/><circle cx="10" cy="10" r="3"/></svg>
+            </span>
+          </div>
+        </div>
+        <div class="auth-actions">
+          <button class="btn-primary">Войти</button>
+          <span style="font-size:14px;color:var(--text-mid)">или</span>
+          <a class="social-btn social-vk" href="#" title="VK">
+            <svg width="22" height="14" viewBox="0 0 22 14" fill="white"><path d="M21.3 1.2c.1-.5 0-.8-.7-.8h-2.3c-.6 0-.9.3-1 .7 0 0-1.2 2.9-2.9 4.8-.5.5-.8.7-1 .7-.2 0-.4-.2-.4-.7V1.2c0-.6-.2-.8-.7-.8H9.1c-.4 0-.6.3-.6.6 0 .6.9.8 1 2.6v3.9c0 .7-.1.9-.4.9-.8 0-2.6-2.9-3.7-6.3C5.1.3 4.9 0 4.3 0H2C1.3 0 1.2.3 1.2.8c0 .7.8 4 3.7 8.4 1.9 2.8 4.6 4.2 7.1 4.2 1.4 0 1.6-.3 1.6-.9v-2c0-.7.1-.8.7-.8.4 0 1.1.2 2.7 1.8 1.8 1.8 2.1 2.5 3.1 2.5h2.3c.7 0 1-.3.8-1-.2-.7-1-1.7-2-2.8-.5-.6-1.3-1.3-1.6-1.8-.4-.5-.3-.7 0-1.1 0 0 2.9-4.1 3.2-5.5z"/></svg>
+          </a>
+          <a class="social-btn social-ok" href="#" title="OK" style="color:white;font-weight:700;font-size:20px;font-family:serif;">о</a>
+          <a href="#" style="flex:1;text-align:right;font-size:14px;color:var(--main);text-decoration:none;font-weight:500;">Напомнить пароль</a>
+        </div>
+      </div>
+
+      <!-- Guest info -->
+      <div class="card">
+        <h3 class="card-title" style="margin-bottom:16px;">Данные основного гостя</h3>
+        <div class="input-rows">
+          <div class="input-row">
+            <div class="field-group">
+              <label class="field-label">Имя <span class="required">*</span></label>
+              <input class="field-input" type="text" placeholder="Ivan" />
+            </div>
+            <div class="field-group">
+              <label class="field-label">Фамилия <span class="required">*</span></label>
+              <input class="field-input" type="text" placeholder="Ivanov" />
+            </div>
+          </div>
+          <div class="input-row">
+            <div class="phone-row" style="flex:1;min-width:0;">
+              <div class="phone-code">
+                <span class="phone-code-label">Код страны</span>
+                <div class="phone-code-val">
+                  <span class="flag">🇷🇺</span>
+                  <span>+7</span>
+                  <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6l4 4 4-4"/></svg>
+                </div>
+              </div>
+              <div class="phone-number">
+                <label class="field-label">Номер телефона <span class="required">*</span></label>
+                <input type="tel" placeholder="900 000 00 00" />
+              </div>
+            </div>
+            <div class="field-group" style="flex:1;">
+              <label class="field-label">Email <span class="required">*</span></label>
+              <input class="field-input" type="email" placeholder="ivanov@gmail.com" />
+            </div>
+          </div>
+          <div class="field-group" style="position:relative;">
+            <label class="field-label">
+              Гражданство <span class="required">*</span>
+              <span class="hint-icon" title="Гражданство гостя">?</span>
+            </label>
+            <select class="field-select">
+              <option>Российская Федерация</option>
+              <option>Казахстан</option>
+              <option>Беларусь</option>
+              <option>Другое</option>
+            </select>
+            <span class="field-select-arrow">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6l4 4 4-4"/></svg>
+            </span>
+          </div>
+        </div>
+        <div style="margin-top:16px;">
+          <button class="btn-secondary">Добавить данные всех гостей</button>
+        </div>
+      </div>
+
+      <!-- Food -->
+      <div class="card">
+        <h3 class="card-title" style="margin-bottom:16px;">Питание</h3>
+        <div class="selector">
+          <div class="selector-option" data-selected="false" onclick="toggleFood(this)">
+            <div class="radio" id="radio1"></div>
+            <div class="option-content">
+              <div class="option-header">
+                <span>Добавить завтрак</span>
+                <span>+2 000 ₽</span>
+              </div>
+              <div class="option-sub">
+                <span>Для всех гостей на все дни проживания</span>
+                <span>+ 1 000 ₽ за ночь</span>
+              </div>
+              <span class="option-tag">Рекомендуем</span>
+            </div>
+          </div>
+          <div class="selector-option" data-selected="true" onclick="toggleFood(this)">
+            <div class="radio checked" id="radio2"><span style="display:none"></span></div>
+            <div class="option-content">
+              <div class="option-header">
+                <span>Без завтрака</span>
+              </div>
+              <div class="option-sub" style="display:block;">
+                <span>Завтрак не включен в стоимость, но может быть оплачен дополнительно на месте</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Check-in -->
+      <div class="card">
+        <div class="check-in-header">
+          <h3>Время заезда</h3>
+          <p>Ваш номер будет готов к 14:00</p>
+        </div>
+        <div class="input-row" style="margin-bottom:20px;">
+          <div class="field-group" style="max-width:276px;position:relative;">
+            <label class="field-label">Примерное время заезда</label>
+            <select class="field-select">
+              <option>Неизвестно</option>
+              <option>До 14:00</option>
+              <option>14:00 – 16:00</option>
+              <option>16:00 – 18:00</option>
+              <option>18:00 – 20:00</option>
+              <option>После 20:00</option>
+            </select>
+            <span class="field-select-arrow">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 6l4 4 4-4"/></svg>
+            </span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <h3 class="card-title">Особые пожелания</h3>
+          <div class="textarea-wrap">
+            <label class="textarea-label">Опишите ваш запрос</label>
+            <textarea class="field-textarea" placeholder="Например: второе одеяло, номер на первом этаже или мягкие тапочки на пороге. Мы передадим это отелю и Ваши пожелания постараются учесть"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pay CTA -->
+      <div class="pay-section">
+        <button class="btn-primary btn-primary-lg">Перейти к оплате</button>
+        <a href="#" class="info-link">Информация об исполнителях</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT COLUMN -->
+  <div class="col-side">
+
+    <!-- Hotel Info -->
+    <div class="card hotel-info card-sm" style="padding:16px;">
+      <div>
+        <div class="stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+        </div>
+        <div class="hotel-name">Отель Palmira Art</div>
+        <div class="hotel-address">улица 4-я Магистральная, д. 4/11, Москва</div>
+        <div class="dates-row">
+          <div class="date-box">
+            <div class="date-box-label">Заезд после 14:00</div>
+            <div class="date-box-val">19 декабря, пт</div>
+          </div>
+          <div class="date-box">
+            <div class="date-box-label">Выезд до 12:00</div>
+            <div class="date-box-val">21 декабря, вс</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="room-name">Двухместный номер Стандарт</div>
+        <div class="room-info">для 2 взрослых • Двуспальная кровать</div>
+        <div class="tag-deferred">
+          Отложенная оплата
+          <span class="hint-icon" style="margin-left:4px;" title="Оплата при заезде">?</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Promo -->
+    <div class="card card-sm promo-card">
+      <div class="promo-inner">
+        <div style="font-size:18px;font-weight:700;padding:10px 0 12px 4px;">Промокод</div>
+      </div>
+      <div class="promo-row" style="padding:0 4px 12px;">
+        <div class="promo-input-wrap" style="flex:1;position:relative;">
+          <label class="field-label" style="position:absolute;top:2px;left:12px;font-size:12px;font-weight:500;color:var(--text-dark);">Введите промокод</label>
+          <input class="field-input" type="text" placeholder="PROMOCODE" style="border-radius:12px 0 0 12px;border-right:none;" />
+        </div>
+        <button class="btn-icon" style="border-radius:0 8px 8px 0;height:48px;">
+          <svg viewBox="0 0 18 18" fill="none" stroke="white" stroke-width="2.2"><path d="M3 9l4 4 8-8"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Price -->
+    <div class="card card-sm" style="padding:0;">
+      <div class="price-section">
+        <div class="price-title">Стоимость</div>
+      </div>
+      <div class="price-rows">
+        <div class="price-row">
+          <span>Номер за 2 ночи, 3 гостей</span>
+          <span>29 100 ₽</span>
+        </div>
+        <div class="price-row">
+          <span>Спецпредложения</span>
+          <span class="price-discount">- 1 090 ₽</span>
+        </div>
+      </div>
+      <div class="final-price-box">
+        <span>Итого к оплате сейчас</span>
+        <span>26 190 ₽</span>
+      </div>
+    </div>
+
+    <!-- Not included -->
+    <div class="card card-sm" style="padding:0;">
+      <div class="price-section">
+        <div class="not-included-title">
+          В стоимость не включено
+          <span class="hint-icon" title="Оплачивается на месте">?</span>
+        </div>
+      </div>
+      <div class="price-rows" style="padding-bottom:12px;">
+        <div class="price-row">
+          <span>Городской налог</span>
+          <span>5,50 €</span>
+        </div>
+        <div class="price-row">
+          <span>Туристический сбор</span>
+          <span>2,50 €</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-top">
+    <div>
+      <div class="footer-logo">ostrovok</div>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <div class="footer-col-title">Компания</div>
+        <a href="#">Компания и команда</a>
+        <a href="#">Контакты</a>
+        <a href="#">Вакансии</a>
+        <a href="#">Для прессы</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Клиентам</div>
+        <a href="#">База знаний</a>
+        <a href="#">Служба поддержки</a>
+        <a href="#">Блог о путешествиях</a>
+        <a href="#">Популярные направления</a>
+        <a href="#">Юридическая информация</a>
+        <a href="#">Программа лояльности GURU</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Партнёрам</div>
+        <a href="#">Объектам размещения</a>
+        <a href="#">Турагентствам</a>
+        <a href="#">Корпоративным клиентам</a>
+        <a href="#">Поиск отелей на вашем сайте</a>
+        <a href="#">Рекламодателям</a>
+        <a href="#">Реклама и PR</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom" style="max-width:none;padding:20px;">
+    <div style="max-width:1186px;margin:0 auto;width:100%;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:20px;">
+      <div class="security-text">
+        <strong>Безопасность платежей</strong>
+        Надежная защита данных от ведущих платёжных систем.
+      </div>
+      <div class="payment-icons">
+        <span class="payment-icon payment-visa">VISA</span>
+        <span class="payment-icon payment-mc" style="font-weight:700;">MC</span>
+        <span class="payment-icon">МИР</span>
+        <span class="payment-icon" style="color:#2e6da4;">PCI DSS</span>
+      </div>
+    </div>
+    <div style="max-width:1186px;margin:0 auto;width:100%;display:flex;justify-content:space-between;padding-top:12px;flex-wrap:wrap;gap:8px;">
+      <a href="#" style="font-size:14px;color:var(--text-mid);text-decoration:none;">© 2024 Ostrovok.ru. Все права защищены.</a>
+      <a href="#" style="font-size:14px;color:var(--text-mid);text-decoration:none;">Политика конфиденциальности</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Food toggle
+  function toggleFood(el) {
+    document.querySelectorAll('.selector-option').forEach(opt => {
+      opt.dataset.selected = 'false';
+      opt.querySelector('.radio').classList.remove('checked');
+    });
+    el.dataset.selected = 'true';
+    el.querySelector('.radio').classList.add('checked');
+  }
+
+  // Input focus float labels
+  document.querySelectorAll('.field-input').forEach(input => {
+    input.addEventListener('input', () => {
+      input.classList.toggle('filled', input.value.length > 0);
+    });
+  });
+</script>
+</body>
+</html>
